@@ -37,8 +37,8 @@ Fuzzy words interact — record how, so a later session doesn't pin one in a way
 
 ## Where the values live
 
-- Spacing scale, type ramp, color roles: `src/styles/tokens.css`
-- Motion curves: `tailwind.config.ts` → `transitionTimingFunction`
+- {category — e.g. spacing/type/color, motion}: `{path/to/where they live in this project}`
+- {category}: `{path/to/where they live in this project}`
 
 ## Flagged ambiguities
 

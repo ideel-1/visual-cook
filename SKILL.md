@@ -43,7 +43,7 @@ Only when all three hold — **hard to reverse**, **surprising without context**
 
 ## The harness
 
-- Create the scratch dir at the repo root as `.visual-cook/<topic-slug>/` — this exact location and naming, gitignored, never an invented ad-hoc path. It **imports the real component**, or renders a **specimen** for vocabulary work.
+- Create the scratch dir at the repo root as `.visual-cook/<topic-slug>/` — this exact location and naming, never an invented ad-hoc path. If `.visual-cook/` isn't already in `.gitignore`, add it. It **imports the real component**, or renders a **specimen** for vocabulary work.
 - **Announce the dir path the moment you create it, and the preview URL once it's serving.** The harness is the handoff spec — if I don't know where it lives, it can't serve its purpose. Don't render silently.
 - **Never overwrite an existing topic's dir.** New topic → new dir; existing dir → you're resuming that topic. Reusing one topic's harness for another silently destroys finished edits.
 - **Wire interactivity for real only when the question is about transition, timing, or state-change** — things you can't judge from a still ("is this snappy?"). Then it's real `useState`/`onChange`/CSS transitions, never a static replica with hardcoded values. Layout, spacing, type, and color are static — a specimen settles them faster, even on an interactive component.
