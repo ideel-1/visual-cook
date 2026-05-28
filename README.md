@@ -40,7 +40,7 @@ Claude Code auto-discovers skills in those locations. Restart your session and t
 
 In any Claude Code session, point Claude at the work:
 
-> "Let's visual-cook the empty state on the dashboard — feels limp."
+> "Let's visual-cook the empty state on the dashboard."
 
 Claude will start the interview, spin up a harness at `.visual-cook/<topic>/`, announce the preview URL, and grill from there. No need to invoke a command — the skill description triggers on UI-feel and visual-system phrasing.
 
