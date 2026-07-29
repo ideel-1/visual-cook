@@ -1,22 +1,31 @@
 # visual-cook
 
-A [Claude Code](https://claude.com/claude-code) skill for grilling visual work — pinning fuzzy design language ("cleaner", "premium", "pop", "like Linear") to concrete decisions, grounding disagreements in real renders, and leaving a **self-documenting keeper harness** as the durable spec.
+A [Claude Code](https://claude.com/claude-code) skill for iterating on visual work inside a live harness — labeled variants side by side, mounted from your **real** components, persisting as the durable spec and as an archive of every version you've tried.
 
 Use it when:
 
 - a UI "feels off" and you can't say why
+- you want a few versions side by side to judge by eye, then keep iterating on whichever is closest
 - you're setting up or extending a visual system
-- you're polishing a single detail and want a real conversation about trade-offs
+- you're polishing a single detail and want the trade-off rendered rather than described
 
 ## What it does
 
-Instead of generating a design and asking "is this good?", `visual-cook` interviews you. It walks the decision tree one question at a time, with its own recommended answer for each. Every vague word either gets decided on screen — via a harness that imports the **real** component, never a lookalike — or recorded as a decision *in* the harness, so when the answer lives in the pixels, you point rather than argue in prose.
+Instead of generating a design and asking "is this good?", `visual-cook` builds you an instrument: the current thing mounted as V1, labeled variants beside it, each moving **one named axis**, all in one viewport. You judge by looking and iterate by pointing — "V2, but the gap's too tight" edits V2 in place, and lanes are never collapsed into each other, so both the comparison and the history survive.
+
+That is deliberately not "here are three options, pick one", and three rules keep it from becoming that: **V1 is the incumbent**, so the question is always whether anything beats what already exists rather than a taste vote between novelties; **lanes persist**, so a verdict is a direction instead of a terminal choice; and **every lane argues one declared axis**, written into the rationale panel next to it — a variant whose axis you can't name is slop, and you find out because you can't write its line.
+
+Kind questions get asked; degree questions get rendered. What the thing *is* is worth words. How much of it — spacing, weight, radius, contrast, timing, density — never is: two lanes settle that in a second, and a vague word like "cleaner" becomes lanes along the axes it could mean (more whitespace / fewer borders / lower contrast) rather than a question about which you meant.
 
 It leaves behind:
 
 - **A permanent keeper harness** per topic at `/dev/visual-cook/<topic-slug>` — labeled lanes (current vs. variants) plus a rendered verdict: what won, what was rejected and why, the exact settled values. The artifact carries its own rationale, so the record can't drift from the state.
 - **One cook index** — a small `index.ts` data file behind a `/dev/visual-cook` catalog page: one row per cook, its status (`settled · superseded · abandoned · wip`), and whether the verdict has actually landed in prod. This is the "have we cooked this before" memory that stops dead ideas being re-cooked.
 - **A canonical chrome** — every cook in every repo gets the same cook UI, from a copy-paste skeleton in `SKILL.md`. Zero resting footprint (collapsed is a grabber handle; the stage never reserves a margin, so full-width questions are judged against the real viewport), an overlay panel that never resizes the stage, two pinned palettes with polarity declared per cook (no host-repo tokens), pinned `system-ui` + radii, docked never floating, `?lane=` deep links, arrow-key lane cycling.
+
+## v3 — the instrument, not the interview
+
+v1 and v2 called this a grilling session: the skill interviewed you and pinned every fuzzy word by asking. Real use moved elsewhere. What carries the value is the persistent labeled lineup you iterate *inside*; the interview turned out to matter for exactly one thing rendering cannot do — catching a **wrong premise**, which kills every variant at once and which more variants actively hide. So v3 makes the instrument the spine and keeps the interview as a mode with an observable trigger: every lane getting rejected, or a rejection that names nothing on screen. If you liked being interviewed, ask for it — "grill me on this" still enters that mode.
 
 ## v2 — the harness is the record
 
@@ -50,7 +59,7 @@ In any Claude Code session, point Claude at the work:
 
 > "Let's visual-cook the empty state on the dashboard."
 
-Claude will start the interview, stand up a keeper harness under your dev route, announce the preview URL, and grill from there. No need to invoke a command — the skill description triggers on UI-feel and visual-system phrasing.
+Claude will stand up a keeper harness under your dev route, mount the current component as V1, announce the preview URL, and iterate from there. No need to invoke a command — the skill description triggers on UI-feel, side-by-side, and visual-system phrasing.
 
 The skeleton in `SKILL.md` assumes Next.js + Tailwind (v4); the principles — real components, keeper harnesses, the index, the zero-footprint overlay chrome — port to any stack.
 
@@ -58,12 +67,13 @@ The skeleton in `SKILL.md` assumes Next.js + Tailwind (v4); the principles — r
 
 This repo is a **published snapshot**. The canon lives in a private brain repo, where the chrome is
 edited canon-first (never forked per project) and a snapshot lands here when a cook settles. So the
-skill is self-sufficient — paste the skeleton and you have the chrome — but the living reference
-harness it was judged in isn't public.
+skill is self-sufficient — paste the skeleton and you have the chrome — but the part that makes the
+practice compound isn't shippable: the accumulated archive of past lanes, in your own components, is
+something you build by using it, not something a snapshot can hand you.
 
-Current snapshot: **2026-07-29** — zero-footprint grabber chrome + declared polarity, superseding the
-docked 44px rail.
+Current snapshot: **2026-07-29** — the v3 instrument-first spine, plus the zero-footprint grabber
+chrome with declared polarity that superseded the docked 44px rail.
 
 ## Philosophy
 
-Most visual work goes wrong in one of two ways: arguing about fuzzy words without referents, or making decisions in a harness that vanish at handoff because nobody wrote them down. `visual-cook` is structured around both failure modes — *pin or render, never argue in prose*, and *the artifact carries its own rationale*, so the record and the pixels are the same thing and can't disagree.
+Most visual work goes wrong in one of three ways: arguing about fuzzy words without referents, choosing between novelties with no incumbent to beat, or making decisions in a harness that vanish at handoff because nobody wrote them down. `visual-cook` is built around all three — *render, don't argue*, *V1 is what you already have*, and *the artifact carries its own rationale*, so the record and the pixels are the same thing and can't disagree.

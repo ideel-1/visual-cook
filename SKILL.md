@@ -1,13 +1,17 @@
 ---
 name: visual-cook
-description: Grilling session for visual work that pins fuzzy design language to concrete decisions, grounds disagreements in real renders, and leaves a self-documenting keeper harness as the durable spec. Use when a UI feels off, when establishing or extending a visual system, or when polishing a single detail.
+description: Iterate on visual work inside a live harness — labeled variants side by side, mounted from the real components, persisting as the durable spec and the record. Use when a UI feels off, when you want versions side by side to judge by eye ("show me a few versions", "which of these feels better", "iterate on this design"), when establishing or extending a visual system, or when polishing a single detail.
 ---
 
 <what-to-do>
 
-Interview me relentlessly about the visual work until we share a concrete understanding. Walk each branch of the decision tree, resolving dependencies one at a time. Ask one question at a time, wait for my answer, and give your own recommended answer with each. Ask in prose — never the structured question UI.
+Build the instrument, don't hold a meeting. Mount the *current* thing as V1 in a live harness, add labeled variants beside it — each moving **one named axis** — and let me judge by looking; I iterate by pointing, you edit the named lane in place. Start building on my opening sentence; don't open with questions, and never make me classify my request first.
 
-No fuzzy word survives un-pinned. Every vague term ("cleaner", "premium", "pop", "off", "like Linear") ends up either decided on screen via a render or recorded as a decision in the harness — when the answer lives in the pixels, render and let me point rather than argue in prose.
+That is not "generate three options and let me pick", and three things keep it from degrading into that: **V1 is the incumbent**, so the question is always "does anything beat what already exists" rather than a taste vote between novelties; **lanes persist**, so a verdict is a direction ("V2, but the gap's too tight") rather than a terminal choice; and **every lane is an argument on a declared axis**, so the lineup reads as N arguments instead of one theme recoloured. A variant you can't name the axis of is slop — and you will notice, because you won't be able to write its line in the rationale panel.
+
+**Kind questions get asked; degree questions get rendered.** What the thing *is*, and which variable a lane moves, are words — but pinned as a label and a rationale line *in the harness*, not extracted from me in an interview. How much (spacing, weight, radius, contrast, timing, density) is never words: two lanes settle it in a second, and asking me first makes me do the harness's job in my head, badly. So every vague term ("cleaner", "premium", "pop", "off", "like Linear") becomes lanes along the axes it could mean — render and let me point rather than argue in prose.
+
+**The interview is a mode, not the identity.** It fires when a premise is wrong, which no variant can show — see "When to stop rendering and talk". When you do ask, ask in prose, one question at a time, always with your own recommended answer — never the structured question UI.
 
 **The harness is the deliverable and the record.** You build the winning spec *in the harness*, with its rationale next to it — you do not re-encode it into prose design docs (that lineage is retired; see "The harness is the record"). When the design is settled, the default is to hand the harness to a separate implementer chat — cooking is token-heavy, and exploration and implementation are opposite modes. Apply inline only for a small cook decided early.
 
@@ -15,24 +19,21 @@ No fuzzy word survives un-pinned. Every vague term ("cleaner", "premium", "pop",
 
 <supporting-info>
 
-## Orientation (the opening move)
+## Before you build
 
-You need two things before rendering, inferring the first from my opening sentence — never make me classify my request:
+Two things, both inferred from my opening sentence rather than asked for:
 
 1. **What the harness shows** — the real component, unless the work is about the vocabulary itself (type ramp, spacing scale, color roles), in which case a specimen of it.
-2. **What reference I'm grilling against** — any screenshot, URL, or product I supply; treat it as one more fuzzy word to pin.
+2. **What reference I'm judging against** — any screenshot, URL, or product I supply; treat it as one more fuzzy word, i.e. as a lane to render rather than a question to ask.
 
-**Material is supplied, never discovered.** Don't hunt the repo for design docs, Figma files, or brand systems — grill with whatever I hand you. The only thing you auto-locate is *code* (the real component to render).
+**Material is supplied, never discovered.** Don't hunt the repo for design docs, Figma files, or brand systems — cook with whatever I hand you. The only thing you auto-locate is *code* (the real component to render).
 
 **On resume, check whether we've cooked this before.** Read the cook index first (the `/dev/visual-cook` index page, backed by `index.ts` — see "The harness is the record") — it lists every prior cook, the real component it touched, what it settled, and its status. Past keeper harnesses are the memory of this work; an existing dir means you're resuming it, never overwrite it.
 
 ## During the session
 
-### Sharpen fuzzy language (the core move)
-Every vague word gets one counter-question forcing a concrete referent. "*Cleaner* — more whitespace, fewer borders, or lower contrast? Those diverge." A supplied reference is just another fuzzy word: "*Like Linear* — it uses near-zero borders and one accent; you want three. Reconcile?"
-
-### Challenge the frame, not just the appearance
-The interview's highest value is catching a *wrong premise* that no variant can show — e.g. realizing the thing being designed isn't what it's for ("this isn't a bio — it just shows their favorite books"). A wrong frame kills every variant at once. Surface it by naming the real case out loud, not by rendering more options.
+### Fuzzy language becomes lanes, not questions
+A vague word has readings that diverge, and *that divergence is the axis*: "cleaner" splits into more whitespace / fewer borders / lower contrast, so build all three labeled instead of asking which one I meant. A supplied reference is the same — "like Linear" is a lane (near-zero borders, one accent) rendered against what I have (three), and the reconciliation happens by looking. Ask only when the readings *wouldn't* diverge visually, i.e. when they'd change what the thing is rather than how much of it there is.
 
 ### Probe states, not just the happy path
 The visual equivalent of edge cases is *states*: hover, focus, active, disabled, empty, loading, error, long text, dark mode, 320px wide. "Feels off" usually hides in an unconsidered one. **Honor `prefers-reduced-motion`** — it's a standing project rule; a motion variant that ignores it can't be judged and can't ship.
@@ -46,18 +47,23 @@ A complaint about a *transition* — "it enlarges, then somehow gets smaller", "
 ### Ground the spec against reality before locking
 Never settle a decision against a guess about the real component. Mount the real thing and check the real values — a cook that settles on a fantasy (e.g. "the panel is fixed-height" when it's actually fluid) hands the implementer a broken spec. If you can't render the real component honestly, you can't lock.
 
+### When to stop rendering and talk (interview mode)
+The interview's one irreplaceable job is catching a *wrong premise*, which no variant can show — e.g. realizing the thing being designed isn't what it's for ("this isn't a bio — it just shows their favorite books"). A wrong frame kills every variant at once, and rendering more *hides* it: every lane inherits the bad premise, so a lineup that all reads wrong looks like a taste problem instead of a frame problem.
+
+**The trigger is observable, so watch for it instead of guessing up front:** every lane is getting rejected, or a rejection names nothing that's on screen. Then stop building and name the real case out loud — that is the move, not another round of variants. Also enter this mode on request ("grill me on this"), and there walk each branch of the decision tree one question at a time, in prose, always with your own recommended answer.
+
 ## The harness
 
-Three hard rules, in priority order:
+Four hard rules, in priority order:
 
-1. **Real, in context, sized right.** Show the real artifact whole, inside a correctly-sized window of its real context — never clipped, never trapped behind a nested scrollbar, never shrunk to fit. Scope the *view* to the *question*: a component-level question ("how does this control read?") → isolate that component plus only the neighbors its interaction can collide with; a between-regions question ("does it fit / does this fix disturb the layout?") → the full app at real viewports. A device-frame that renders the actual page chrome and resizes is the gold standard. Never freeze a component's real in-context motion just to pin a layout.
-2. **No fakes.** Any supporting component you put on screen must be the *real* one, imported or mounted from source. A hand-built lookalike is a bug, not a shortcut. If the real component needs auth or data, mount it behind a throwaway page with seeded data — that is the only sanctioned way to get it rendering.
-3. **Real interactivity, verified.** Wire real `useState`/`onChange`/CSS transitions only when the question is about transition, timing, or state-change — and then verify it actually works (clickable, fires) before handing it over. Layout, spacing, type, and color are static; a specimen settles those faster. A static replica with hardcoded values posing as interactive is the classic failure.
+1. **Labeled lanes on named axes, V1 = the incumbent.** Show current vs. 2–3 variants **in one viewport** so the eye compares without scrolling, each labeled, each moving one axis you can name in the rationale panel. Lanes **persist across iterations within a topic** — "V1 but tighter" edits V1 in place. Never collapse V1/V2 into a new V3 unasked: I judge against stable labels, and the archive of past lanes is half of what makes the harness worth more than a screenshot.
+2. **Real, in context, sized right.** Show the real artifact whole, inside a correctly-sized window of its real context — never clipped, never trapped behind a nested scrollbar, never shrunk to fit. Scope the *view* to the *question*: a component-level question ("how does this control read?") → isolate that component plus only the neighbors its interaction can collide with; a between-regions question ("does it fit / does this fix disturb the layout?") → the full app at real viewports. A device-frame that renders the actual page chrome and resizes is the gold standard. Never freeze a component's real in-context motion just to pin a layout.
+3. **No fakes.** Any supporting component you put on screen must be the *real* one, imported or mounted from source. A hand-built lookalike is a bug, not a shortcut. If the real component needs auth or data, mount it behind a throwaway page with seeded data — that is the only sanctioned way to get it rendering.
+4. **Real interactivity, verified.** Wire real `useState`/`onChange`/CSS transitions only when the question is about transition, timing, or state-change — and then verify it actually works (clickable, fires) before handing it over. Layout, spacing, type, and color are static; a specimen settles those faster. A static replica with hardcoded values posing as interactive is the classic failure.
 
 Conventions:
 - Scratch dir at the repo root mirror, served live under a namespaced route — `/visual-cook/<topic-slug>` (or the repo's existing dev-route convention, e.g. `dev/visual-cook/<topic-slug>`), using the **same slug**. Never a bare top-level route. Announce the dir path when you create it and the preview URL once it's serving.
 - **Keep the harness tracked in git — never gitignore it.** In Next + Tailwind v4 + Turbopack, a gitignored dir gets no generated CSS and no HMR (novel utilities silently resolve to nothing). Tracked, never ignored.
-- Show **current vs. 2–3 variants in one viewport**, labeled. Lanes **persist across iterations within a topic** — "V1 but tighter" edits V1 in place. Never collapse V1/V2 into a new V3 unasked; I judge against the labels.
 - **Live dials (DialKit), if present:** label one **primary** dial; mark the rest as guardrails (I shouldn't have to guess what each does). Dials coexist with labeled variants — I tune the chosen variant. Dialed numbers are *not* the spec; the landed value is.
 - Build with the repo's existing stack; don't impose one.
 
