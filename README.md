@@ -16,7 +16,7 @@ It leaves behind:
 
 - **A permanent keeper harness** per topic at `/dev/visual-cook/<topic-slug>` — labeled lanes (current vs. variants) plus a rendered verdict: what won, what was rejected and why, the exact settled values. The artifact carries its own rationale, so the record can't drift from the state.
 - **One cook index** — a small `index.ts` data file behind a `/dev/visual-cook` catalog page: one row per cook, its status (`settled · superseded · abandoned · wip`), and whether the verdict has actually landed in prod. This is the "have we cooked this before" memory that stops dead ideas being re-cooked.
-- **A canonical chrome** — every cook in every repo gets the same collapsible-sidebar cook UI, from a copy-paste skeleton in `SKILL.md`. Fixed neutral values (pinned `system-ui`, pinned radii, no host-repo tokens), docked never floating, `?lane=` deep links, arrow-key lane cycling.
+- **A canonical chrome** — every cook in every repo gets the same cook UI, from a copy-paste skeleton in `SKILL.md`. Zero resting footprint (collapsed is a grabber handle; the stage never reserves a margin, so full-width questions are judged against the real viewport), an overlay panel that never resizes the stage, two pinned palettes with polarity declared per cook (no host-repo tokens), pinned `system-ui` + radii, docked never floating, `?lane=` deep links, arrow-key lane cycling.
 
 ## v2 — the harness is the record
 
@@ -52,7 +52,17 @@ In any Claude Code session, point Claude at the work:
 
 Claude will start the interview, stand up a keeper harness under your dev route, announce the preview URL, and grill from there. No need to invoke a command — the skill description triggers on UI-feel and visual-system phrasing.
 
-The skeleton in `SKILL.md` assumes Next.js + Tailwind (v4); the principles — real components, keeper harnesses, the index, the neutral docked chrome — port to any stack.
+The skeleton in `SKILL.md` assumes Next.js + Tailwind (v4); the principles — real components, keeper harnesses, the index, the zero-footprint overlay chrome — port to any stack.
+
+## Snapshot, not source
+
+This repo is a **published snapshot**. The canon lives in a private brain repo, where the chrome is
+edited canon-first (never forked per project) and a snapshot lands here when a cook settles. So the
+skill is self-sufficient — paste the skeleton and you have the chrome — but the living reference
+harness it was judged in isn't public.
+
+Current snapshot: **2026-07-29** — zero-footprint grabber chrome + declared polarity, superseding the
+docked 44px rail.
 
 ## Philosophy
 
