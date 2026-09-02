@@ -241,6 +241,7 @@
       <li><strong>Yes, companies have built multiplayer agent views.</strong> Amp, Warp, Cursor, Devin, Codex and Anthropic's own cloud sessions all let teammates open each other's runs. Details in the table below. For two people on Claude Code with a self-hosted GitLab, none of them is worth switching for. The one idea worth stealing, shared threads, you get from Entire without leaving the terminal.</li>
       <li><strong>Your agents cannot message each other.</strong> Cross-session messaging works across machines only inside one account. Between two people the mailbox is a GitLab issue with a fixed template.</li>
       <li><strong>The zip is the actual problem.</strong> Tokens as JSON, rules in a file the agent loads by itself, and a check it can run. That removes more misunderstanding than any monitor.</li>
+      <li><strong>Adoption: put everything in the repo and in the admin console. Nobody installs anything for the pilot.</strong> Rules, skill, hooks and issue template are files in the console repo, so they apply to whoever opens it, in Claude Code, Cursor, Codex or Gemini. Company-wide, one admin pushes the Claude Code parts from claude.ai. Details in "Rollout".</li>
     </ul>
   </section>
 
@@ -586,6 +587,71 @@ Blocking: yes</code></pre>
     </div>
   </div>
 
+
+  <h2 id="rollout">Rollout to the company</h2>
+  <p>The order of ease: things nobody has to do, then things one admin does once, then things each person does once. Keep the pilot inside the first ring. Only grow into the others when the pilot has shown the value.</p>
+
+  <h3>Ring 0 · in the repo. Nobody installs anything.</h3>
+  <p>Files committed to the console repo apply to everyone who opens it, whichever agent they use. This is the whole pilot. He clones, he works, you watch.</p>
+  <div class="tree"><span class="hi">console-app/</span>
+├── <span class="hi">AGENTS.md</span>            <span class="c">the rules; Cursor, Codex and Gemini read this name</span>
+├── <span class="hi">CLAUDE.md</span>            <span class="c">one line: @AGENTS.md  (Claude Code reads this name)</span>
+├── DESIGN.md · tokens.json · scripts/ds-check      <span class="c">from the design-system repo, or a package pin</span>
+├── .claude/
+│   ├── skills/apply-design-system/SKILL.md   <span class="c">Agent Skills standard, 40+ tools read it</span>
+│   └── <span class="hi">settings.json</span>    <span class="c">hooks: POST tool events to the LAN box; run ds-check after edits</span>
+├── .agents/skills → ../.claude/skills        <span class="c">symlink; Codex and others look here</span>
+├── .cursor/hooks.json   <span class="c">same events for Cursor users, via the opentelemetry-hooks bridge</span>
+└── .gitlab/issue_templates/ds-feedback.md    <span class="c">the mailbox shape</span></div>
+  <ul>
+    <li><strong>Project hooks run for every teammate.</strong> Hooks in <code>.claude/settings.json</code> are shareable by design; they start after the person accepts the workspace-trust dialog on first open. No per-machine config. Works on Linux, Mac, Windows the same way, because an HTTP hook is just a POST.</li>
+    <li><strong>One rules file, two names.</strong> Cursor, Codex and Gemini CLI read <code>AGENTS.md</code>. Claude Code reads <code>CLAUDE.md</code>, which imports it. Nobody maintains two copies.</li>
+    <li><strong>One skill, every agent.</strong> The SKILL.md format is now an open standard adopted by Cursor, Codex, Gemini CLI and Claude Code. Keep it in <code>.claude/skills</code>, symlink <code>.agents/skills</code>.</li>
+    <li><strong>The LAN box is a URL.</strong> Anyone views it in a browser. No client to install, no account.</li>
+  </ul>
+
+  <h3>Ring 1 · the admin console, once. Every Claude Code user, every OS.</h3>
+  <p>Claude Code is org-wide, so the Claude-specific parts go through server-managed settings in the claude.ai admin console (Team and Enterprise). Every machine fetches them at startup and polls hourly. Nothing is copied to laptops. A hook or an <code>env</code> change asks each developer to accept once in an interactive session; after that it just applies.</p>
+<pre><code>{
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel.internal:4318",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
+    "OTEL_LOG_TOOL_DETAILS": "1"
+  },
+  "hooks": {
+    "PostToolUseFailure": [{ "hooks": [{ "type": "http", "url": "http://agents.internal/events" }] }],
+    "Stop":               [{ "hooks": [{ "type": "http", "url": "http://agents.internal/events" }] }]
+  },
+  "extraKnownMarketplaces": {
+    "company": { "source": { "source": "git", "url": "https://gitlab.internal/design/claude-plugins.git" } }
+  },
+  "enabledPlugins": { "design-system@company": true }
+}</code></pre>
+  <ul>
+    <li>Marketplace on your GitLab plus <code>enabledPlugins</code> means the design-system plugin (skill, hooks, check) arrives on every machine without anyone running an install command. Bump the version in the marketplace, everyone gets it.</li>
+    <li>No admin console access? The same JSON as a file: <code>/etc/claude-code/managed-settings.json</code> on Linux and WSL, <code>/Library/Application Support/ClaudeCode/</code> on macOS, <code>C:\Program Files\ClaudeCode\</code> on Windows. Whatever already pushes files to laptops can place it.</li>
+    <li>Cursor and Gemini don't read these. Gemini CLI has its own OpenTelemetry export that can point at the same collector. Cursor hooks feed the same dashboard through the opentelemetry-hooks bridge. Codex is the odd one out; Entire covers it.</li>
+  </ul>
+
+  <h3>Ring 2 · per person, one command, opt-in</h3>
+  <ul>
+    <li><code>entire enable</code> in a repo. This is the one layer that is the same for Claude Code, Cursor, Codex, Gemini and Copilot CLI users: every agent session gets committed next to the code. Homebrew on Mac and Linux, Scoop on Windows. Worth making it the one thing you ask everyone to do, because it is tool-agnostic and it is what lets people read each other's agent work in the repo they already have.</li>
+    <li><code>claude --remote-control</code> plus the share toggle, for anyone who wants their session readable on a phone.</li>
+  </ul>
+
+  <h3>The pilot, and what "went nice" means</h3>
+  <p>Two weeks, one teammate, ring 0 only, plus <code>entire enable</code> if he is willing. Decide the pass marks before you start so the rollout decision is not a vibe:</p>
+  <ul>
+    <li>You never had to sit at his desk to know what the agent did. You answered it from the dashboard, the share link or the checkpoints.</li>
+    <li>Every time the agent got stuck on the design system, a <code>ds-feedback</code> issue appeared, and you closed each with a version bump he could pull.</li>
+    <li>His MR passes <code>ds-check</code> without hand fixes.</li>
+    <li>He would keep the hooks and the rules file if you took them away tomorrow.</li>
+  </ul>
+  <p>If those hold, rollout is mechanical: the ring-0 files become a template that a script drops into any repo, and the admin flips ring 1 once. If they don't, the fix is in the design system package, not in more monitoring.</p>
+
   <h2>Vocabulary</h2>
   <dl>
     <dt>Hook</dt><dd>A script or URL Claude Code calls at a named moment, like after a tool runs. Gets the event as JSON. Can log it or block the action.</dd>
@@ -594,6 +660,8 @@ Blocking: yes</code></pre>
     <dt>Checkpoint (Entire)</dt><dd>An agent session stored in git refs next to the commit it produced. Readable by anyone who can pull.</dd>
     <dt>Cross-session messaging</dt><dd>One Claude session sending text to another session of the same person. Same machine uses a socket; other machines go through Anthropic.</dd>
     <dt>MCP server</dt><dd>A small program that gives an agent tools or documents on request. Storybook, Figma and GitLab all offer one.</dd>
+    <dt>Managed settings</dt><dd>Settings an admin pushes to every Claude Code install, from the claude.ai console or a file on each machine. Can set env, hooks, marketplaces, permissions. Users cannot override them.</dd>
+    <dt>AGENTS.md</dt><dd>The rules-file name Cursor, Codex and Gemini read. Claude Code reads CLAUDE.md, which can import it.</dd>
     <dt>Skill, plugin</dt><dd>A skill is a Markdown how-to the agent loads when relevant. A plugin bundles skills, hooks and MCP servers so one install configures everything.</dd>
     <dt>Merge request (MR)</dt><dd>GitLab's pull request: a proposed change with a diff, line comments, CI results.</dd>
     <dt>Design tokens (DTCG)</dt><dd>Colours, sizes, type as named values in a W3C community group JSON format. Style Dictionary and Tokens Studio read and write it.</dd>
@@ -603,6 +671,8 @@ Blocking: yes</code></pre>
   <h2>Sources</h2>
   <p>Claude Code facts checked against the official docs on 2 September 2026. Product claims come from vendor docs, repos and release notes. Some vendor domains were blocked from here (Warp, Devin, GitLab docs), so those rows rest on search summaries and forum posts; marked "check" where it matters.</p>
   <ul class="sources">
+    <li>Managed settings: <a href="https://code.claude.com/docs/en/managed-settings">code.claude.com/docs/en/managed-settings</a>, <a href="https://code.claude.com/docs/en/server-managed-settings">server-managed settings</a></li>
+    <li>Agent Skills open standard: <a href="https://agentskills.io">agentskills.io</a>; AGENTS.md: <a href="https://agents.md/">agents.md</a></li>
     <li>Monitoring and OpenTelemetry: <a href="https://code.claude.com/docs/en/monitoring-usage">code.claude.com/docs/en/monitoring-usage</a></li>
     <li>Hooks reference: <a href="https://code.claude.com/docs/en/hooks">code.claude.com/docs/en/hooks</a></li>
     <li>Remote Control: <a href="https://code.claude.com/docs/en/remote-control">code.claude.com/docs/en/remote-control</a></li>
