@@ -222,24 +222,33 @@
 </style>
 
 <main>
-  <div class="eyebrow">Briefing · 2 September 2026 · Claude Code + self-hosted GitLab</div>
+<style>
+  .cmp th, .cmp td { padding-right: 12px; white-space: nowrap; }
+  .cmp td:nth-child(2), .cmp td:nth-child(3) { white-space: normal; min-width: 150px; }
+  .cmp td:last-child { white-space: normal; min-width: 170px; color: var(--ink-2); }
+  .y { color: var(--ok); font-weight: 600; }
+  .n { color: var(--bad); font-weight: 600; }
+  .m { color: var(--warn); font-weight: 600; }
+</style>
+  <div class="eyebrow">Briefing · 2 September 2026 · both of you on Claude Code in the terminal · self-hosted GitLab</div>
   <h1>Two Agents, One Design System</h1>
-  <p class="dek">You ship a design system as a zip. Your co-worker's agent applies it to his machine console. <strong>How do you see what his agent does, from your phone, and how do the two agents stop misunderstanding each other?</strong></p>
+  <p class="dek">You ship a design system as a zip. His Claude Code applies it to the machine console. <strong>How do you see what his agent does, and how do the two agents stop talking past each other?</strong></p>
 
   <section class="verdict" aria-labelledby="v">
-    <h2 id="v">The short answer</h2>
+    <h2 id="v">Short answer</h2>
     <ul>
-      <li><strong>Nothing lets you watch another person's Claude Code session live under your own login.</strong> That feature is an open request. What exists instead: he shares a read-only session link, or every tool call his agent makes is posted to a small dashboard on the office network, or GitLab becomes the shared record. All three are below, cheapest first.</li>
-      <li><strong>Your agents cannot message each other directly.</strong> Claude Code sessions message across machines only when both belong to the same account. Between two people, the mailbox is a GitLab issue with a fixed template that both agents read and write.</li>
-      <li><strong>The zip is the real problem.</strong> An agent needs tokens as JSON, rules as Markdown it loads automatically, and a check it can run to know it got things right. A repo on your GitLab with those four files does more for the misunderstanding than any monitoring.</li>
+      <li><strong>Watching him live under your own login is not a thing in Claude Code.</strong> Open feature request. What you can do: he shares a read-only session link (zero setup), his session transcripts get committed into git so you read them with a CLI (Entire, 10 minutes), or every tool call from both your laptops streams to one dashboard on the office Wi-Fi (an evening).</li>
+      <li><strong>Yes, companies have built multiplayer agent views.</strong> Amp, Warp, Cursor, Devin, Codex and Anthropic's own cloud sessions all let teammates open each other's runs. Details in the table below. For two people on Claude Code with a self-hosted GitLab, none of them is worth switching for. The one idea worth stealing, shared threads, you get from Entire without leaving the terminal.</li>
+      <li><strong>Your agents cannot message each other.</strong> Cross-session messaging works across machines only inside one account. Between two people the mailbox is a GitLab issue with a fixed template.</li>
+      <li><strong>The zip is the actual problem.</strong> Tokens as JSON, rules in a file the agent loads by itself, and a check it can run. That removes more misunderstanding than any monitor.</li>
     </ul>
   </section>
 
-  <h2>Where each signal actually travels</h2>
-  <p>His agent runs on his laptop and never leaves it. Everything you can see is a copy of something that laptop sends somewhere. There are three destinations, and each one gives you a different kind of view.</p>
+  <h2>Where each signal goes</h2>
+  <p>His agent runs on his laptop. Everything you can see is a copy that laptop sends somewhere. Three destinations, three kinds of view.</p>
 
   <figure>
-    <svg viewBox="0 0 400 560" role="img" aria-label="The engineer's laptop runs the Claude Code session. It can send every tool call to a dashboard box on the office LAN, mirror the session to claude.ai through Remote Control, and push merge requests and issues to the self-hosted GitLab. The designer's phone reads the dashboard, the shared session link and GitLab. The designer's own laptop and agent talk only to GitLab." xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">
+    <svg viewBox="0 0 400 560" role="img" aria-label="The engineer's laptop runs the Claude Code session. It can send every tool call to a dashboard box on the office LAN, mirror the session to claude.ai through Remote Control, and push merge requests, issues and Entire checkpoints to the self-hosted GitLab. The designer's phone reads the dashboard, the shared session link and GitLab. The designer's own laptop and agent talk only to GitLab." xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">
       <defs>
         <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
@@ -248,202 +257,165 @@
           <path d="M0,0 L10,5 L0,10 z" fill="#d2611a"/>
         </marker>
       </defs>
-
-      <!-- Engineer laptop -->
       <rect x="20" y="16" width="360" height="96" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
       <text x="36" y="40" font-weight="600" font-size="13">His laptop · Claude Code session</text>
-      <text x="36" y="58" fill-opacity=".7">runs the restyle against his checkout of the console app</text>
+      <text x="36" y="58" fill-opacity=".7">restyles his checkout of the console app</text>
       <rect x="36" y="72" width="88" height="24" rx="4" fill="none" stroke="currentColor" stroke-opacity=".5"/>
       <text x="80" y="88" text-anchor="middle" font-size="11">hooks · OTel</text>
       <rect x="140" y="72" width="104" height="24" rx="4" fill="none" stroke="currentColor" stroke-opacity=".5"/>
       <text x="192" y="88" text-anchor="middle" font-size="11">Remote Control</text>
       <rect x="260" y="72" width="104" height="24" rx="4" fill="none" stroke="currentColor" stroke-opacity=".5"/>
-      <text x="312" y="88" text-anchor="middle" font-size="11">git push · issues</text>
+      <text x="312" y="88" text-anchor="middle" font-size="11">git push · Entire</text>
 
-      <!-- LAN box (accent = recommended) -->
       <rect x="20" y="192" width="150" height="72" rx="6" fill="none" stroke="#d2611a" stroke-width="1.6"/>
       <text x="95" y="216" text-anchor="middle" font-weight="600" font-size="13">Office LAN box</text>
       <text x="95" y="233" text-anchor="middle" font-size="11" fill-opacity=".75">dashboard · collector</text>
       <text x="95" y="249" text-anchor="middle" font-size="11" fill-opacity=".75">any spare machine</text>
 
-      <!-- Anthropic -->
       <rect x="230" y="192" width="150" height="72" rx="6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/>
       <text x="305" y="216" text-anchor="middle" font-weight="600" font-size="13">Anthropic servers</text>
       <text x="305" y="233" text-anchor="middle" font-size="11" fill-opacity=".75">claude.ai/code</text>
       <text x="305" y="249" text-anchor="middle" font-size="11" fill-opacity=".75">his account only</text>
 
-      <!-- GitLab -->
       <rect x="110" y="330" width="180" height="72" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
       <text x="200" y="354" text-anchor="middle" font-weight="600" font-size="13">Your self-hosted GitLab</text>
       <text x="200" y="371" text-anchor="middle" font-size="11" fill-opacity=".75">design-system repo · console repo</text>
-      <text x="200" y="387" text-anchor="middle" font-size="11" fill-opacity=".75">MRs · issues · CI jobs</text>
+      <text x="200" y="387" text-anchor="middle" font-size="11" fill-opacity=".75">MRs · issues · CI · checkpoints</text>
 
-      <!-- Phone -->
       <rect x="20" y="470" width="150" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
       <text x="95" y="494" text-anchor="middle" font-weight="600" font-size="13">Your phone</text>
       <text x="95" y="511" text-anchor="middle" font-size="11" fill-opacity=".75">browser, read and comment</text>
 
-      <!-- Your laptop -->
       <rect x="230" y="470" width="150" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
       <text x="305" y="494" text-anchor="middle" font-weight="600" font-size="13">Your laptop</text>
       <text x="305" y="511" text-anchor="middle" font-size="11" fill-opacity=".75">your Claude Code session</text>
-      <text x="305" y="527" text-anchor="middle" font-size="11" fill-opacity=".75">edits the design system</text>
+      <text x="305" y="527" text-anchor="middle" font-size="11" fill-opacity=".75">reads his checkpoints, edits DS</text>
 
-      <!-- Arrows: laptop -> LAN box (accent) -->
       <line x1="80" y1="96" x2="80" y2="190" stroke="#d2611a" stroke-width="1.6" marker-end="url(#arwA)"/>
       <text x="86" y="134" font-size="11" fill="#d2611a" font-weight="500">every tool call,</text>
       <text x="86" y="148" font-size="11" fill="#d2611a" font-weight="500">every failure, live</text>
 
-      <!-- laptop -> Anthropic -->
       <line x1="305" y1="96" x2="305" y2="190" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
       <text x="299" y="134" font-size="11" text-anchor="end" fill-opacity=".8">session mirror</text>
-      <text x="299" y="148" font-size="11" text-anchor="end" fill-opacity=".8">(needs claude.ai login)</text>
+      <text x="299" y="148" font-size="11" text-anchor="end" fill-opacity=".8">(claude.ai login)</text>
 
-      <!-- laptop -> GitLab -->
       <line x1="200" y1="96" x2="200" y2="328" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
-      <text x="206" y="290" font-size="11" fill-opacity=".8">MRs, ds-feedback</text>
-      <text x="206" y="304" font-size="11" fill-opacity=".8">issues, exports</text>
+      <text x="206" y="290" font-size="11" fill-opacity=".8">MRs, issues,</text>
+      <text x="206" y="304" font-size="11" fill-opacity=".8">session checkpoints</text>
+      <text x="194" y="170" font-size="11" text-anchor="end" fill-opacity=".8">DS package, rules,</text>
+      <text x="194" y="184" font-size="11" text-anchor="end" fill-opacity=".8">checks come back up ↑</text>
 
-      <!-- LAN box -> phone (accent) -->
       <line x1="95" y1="264" x2="95" y2="468" stroke="#d2611a" stroke-width="1.6" marker-end="url(#arwA)"/>
       <text x="101" y="420" font-size="11" fill="#d2611a" font-weight="500">live feed on</text>
       <text x="101" y="434" font-size="11" fill="#d2611a" font-weight="500">the office Wi-Fi</text>
 
-      <!-- Anthropic -> phone: share link -->
       <path d="M305,264 L305,300 Q305,312 293,312 L60,312 Q48,312 48,324 L48,468" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arw)"/>
       <text x="54" y="345" font-size="11" fill-opacity=".8">share link,</text>
       <text x="54" y="359" font-size="11" fill-opacity=".8">read-only,</text>
       <text x="54" y="373" font-size="11" fill-opacity=".8">refresh to</text>
       <text x="54" y="387" font-size="11" fill-opacity=".8">update</text>
 
-      <!-- GitLab <-> phone -->
       <line x1="150" y1="402" x2="120" y2="468" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)" marker-start="url(#arw)"/>
       <text x="152" y="446" font-size="11" fill-opacity=".8">review, run</text>
       <text x="152" y="460" font-size="11" fill-opacity=".8">pipeline</text>
 
-      <!-- GitLab <-> your laptop -->
       <line x1="250" y1="402" x2="280" y2="468" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)" marker-start="url(#arw)"/>
-      <text x="284" y="446" font-size="11" fill-opacity=".8">your agent reads issues,</text>
-      <text x="284" y="460" font-size="11" fill-opacity=".8">ships DS versions</text>
-
-      <!-- GitLab -> his laptop: DS package (label on the shared vertical) -->
-      <text x="194" y="170" font-size="11" text-anchor="end" fill-opacity=".8">DS package, rules,</text>
-      <text x="194" y="184" font-size="11" text-anchor="end" fill-opacity=".8">checks come back up ↑</text>
+      <text x="284" y="446" font-size="11" fill-opacity=".8">git pull, entire explain,</text>
+      <text x="284" y="460" font-size="11" fill-opacity=".8">push DS versions</text>
     </svg>
-    <figcaption>The orange path is the one I'd build first if you want to see each other's agents work: every hook event from any laptop lands on one box on the LAN, and any phone on the Wi-Fi can open it. The dashed path is the zero-setup option and depends on his account. GitLab is the only place your own agent can meet his.</figcaption>
+    <figcaption>Orange: the live path, one box on the LAN that both laptops post hook events to. Dashed: zero-setup share link, lives in his account. GitLab: the only place your agent and his both read and write, and where his session transcripts land if he runs Entire.</figcaption>
   </figure>
 
-  <h2>Six ways to watch</h2>
-  <p>Rated on the four things you asked about: is it live, does it work on a phone, how much setup, and who else could use it. The first two are things he can do today. The middle two are the real "see each other's agents" answers. The last two turn GitLab into the shared surface.</p>
+  <h2>Seven ways to watch</h2>
+  <p>Rated on: live or not, works on a phone, setup cost, who else can use it. Options 01 and 02 need no infrastructure. 03 and 04 are the "see each other's agents" answers. 05 and 06 make GitLab and chat the shared surface. 07 is the screen-share idea done properly.</p>
 
   <div class="options">
 
     <article class="opt">
-      <header>
-        <span class="num">01</span>
-        <h3>The chair, or a terminal in your phone's browser</h3>
-      </header>
-      <p>Your baseline idea is not weird, it is just low-bandwidth. The technical version of "sit next to him" is a read-only view of his terminal served over the Wi-Fi. A one-binary tool called <code>ttyd</code> serves any terminal as a web page, read-only by default, with a password.</p>
-      <ul class="specs">
-        <li><span class="k">Live</span><span class="pill ok">Yes</span></li>
-        <li><span class="k">Phone</span><span class="pill warn">Cramped</span></li>
-        <li><span class="k">Setup</span><span class="v">10 minutes</span></li>
-        <li><span class="k">Who sees</span><span class="v">Anyone with the URL</span></li>
-      </ul>
-      <p>You see exactly what he sees, scrolling by. You cannot search it, filter it, or come back to it later, and a wide Claude transcript wraps badly on a phone. Good for one afternoon of pairing, not for the weeks of iteration you described.</p>
-      <div class="limits"><strong>Limits.</strong> Synchronous only. Nothing is recorded. Both of you must be on the same network at the same moment.</div>
-      <details>
-        <summary>How he sets it up</summary>
-        <ol>
-          <li>Run Claude Code inside <code>tmux</code> so the terminal has a name.</li>
-          <li>Serve it read-only on his LAN address with basic auth.</li>
-          <li>You open <code>http://his-ip:7681</code> on your phone.</li>
-        </ol>
-<pre><code>tmux new -s restyle        # then run: claude
-ttyd -i 0.0.0.0 -c you:pass tmux attach -t restyle</code></pre>
-        <p>VS Code Live Share does the same through Microsoft's relay with a nicer viewer, but VS Code in a phone browser is impractical.</p>
-      </details>
-    </article>
-
-    <article class="opt">
-      <header>
-        <span class="num">02</span>
-        <h3>He mirrors his session and shares the link</h3>
-      </header>
-      <p>Remote Control mirrors a local Claude Code session to claude.ai/code and the Claude phone app, including a diff pane of his uncommitted changes. Sessions there have a visibility toggle. On a Team or Enterprise plan it is <em>Private</em> or <em>Team</em>. On Pro or Max it is <em>Private</em> or <em>Public</em>. Recipients see the latest state when they open the link, but the view does not update in real time.</p>
+      <header><span class="num">01</span><h3>He mirrors his session and shares the link</h3></header>
+      <p>Remote Control mirrors a local Claude Code session to claude.ai/code and the Claude phone app, with a diff pane of his uncommitted changes. Sessions there have a visibility toggle. Team and Enterprise plans get <em>Private</em> or <em>Team</em>. Pro and Max get <em>Private</em> or <em>Public</em>. You see the latest state when you open the link. It does not update live.</p>
       <ul class="specs">
         <li><span class="k">Live</span><span class="pill warn">On refresh</span></li>
-        <li><span class="k">Phone</span><span class="pill ok">Designed for it</span></li>
-        <li><span class="k">Setup</span><span class="v">1 command</span></li>
+        <li><span class="k">Phone</span><span class="pill ok">Yes</span></li>
+        <li><span class="k">Setup</span><span class="v">One command</span></li>
         <li><span class="k">Who sees</span><span class="v">Your org, or anyone</span></li>
       </ul>
-      <p>You see the whole conversation the way Claude saw it: his prompts, the agent's reasoning, the tool calls, the diff. That is the richest single view of "what issues it is facing", and it needs zero engineering. The catch is that it lives in his account, so he owns the toggle and you only ever look.</p>
-      <div class="limits"><strong>Limits.</strong> Needs a claude.ai login on his side, not an API key, a Bedrock setup or a company LLM gateway. On Team plans an Owner has to switch Remote Control on in the admin settings. The sharing toggle is documented for cloud sessions; Remote Control sessions appear in the same list, but <strong>confirm the toggle shows for his session before you plan around it</strong>, a five-minute test. True multi-user viewing is an open request (issues 40981 and 60082 on the Claude Code repo).</div>
+      <p>You get the whole conversation: his prompts, the agent's reasoning, tool calls, diff. Richest single view of "what is it stuck on". It lives in his account, so he owns the toggle and you only read.</p>
+      <div class="limits"><strong>Limits.</strong> Needs a claude.ai login on his side, not an API key, Bedrock or a company LLM gateway. On Team plans an Owner must switch Remote Control on in admin settings. The share toggle is documented for cloud sessions. Remote Control sessions sit in the same list, but <strong>test that the toggle shows for his session before relying on it</strong>. Real multi-user viewing is an open request (Claude Code issues 40981 and 60082).</div>
       <details>
-        <summary>How he does it, and the fallback</summary>
+        <summary>Commands</summary>
         <ol>
-          <li>In his project: <code>claude --remote-control "console restyle"</code>, or <code>/remote-control</code> inside a running session.</li>
-          <li>Open the session at claude.ai/code, set visibility to Team, send you the link.</li>
-          <li>When a run ends, <code>/export restyle-1.md</code> writes the whole conversation to a file he can drop in the design-system repo. That is your after-the-fact record if the link is not enough.</li>
+          <li>In his project: <code>claude --remote-control "console restyle"</code>, or <code>/remote-control</code> in a running session.</li>
+          <li>Open the session at claude.ai/code, set visibility to Team, send the link.</li>
+          <li>End of run: <code>/export restyle-1.md</code> dumps the conversation to a file.</li>
         </ol>
-        <p>A neat trick for your own agent: <code>claude -p --resume &lt;session-id&gt; "list every place the design system was unclear"</code> asks a finished transcript a question and prints the answer. It only works on the machine that holds the transcript, so it is something he runs and pastes.</p>
+        <p>Also useful: <code>claude -p --resume &lt;session-id&gt; "list every place the design system was unclear"</code> asks a finished transcript a question. Runs only on the machine that holds the transcript.</p>
       </details>
     </article>
 
     <article class="opt lead">
-      <header>
-        <span class="num">03</span>
-        <span class="tag">Recommended for "see each other's agents"</span>
-        <h3>Every tool call posts to a dashboard on the LAN</h3>
-      </header>
-      <p>Claude Code fires a <strong>hook</strong> at about thirty moments in a session: before and after every tool call, when a tool fails, when it needs permission, when it stops. A hook can be an HTTP POST of the event's JSON to any URL. Point it at a small server on a spare machine in the office and you have a live, searchable timeline of every agent in the room, per person and per session. Two open-source dashboards already do exactly this.</p>
+      <header><span class="num">02</span><span class="tag">Best fit for two terminals + GitLab</span><h3>His session transcripts get committed to git. You read them with a CLI.</h3></header>
+      <p>Entire is an open-source CLI (MIT, 5k stars) from GitHub's former CEO. Once enabled in a repo, it hooks Claude Code and, at every commit, stores the full session next to the commit as a checkpoint: transcript, prompts, tool calls, files touched, token use. Checkpoints live in git refs under <code>refs/entire/</code>, so they push and pull like anything else and never show up in the branch history. Works with any git host, GitLab included. No account needed to read them.</p>
+      <ul class="specs">
+        <li><span class="k">Live</span><span class="pill warn">Per commit</span></li>
+        <li><span class="k">Phone</span><span class="pill bad">Terminal</span></li>
+        <li><span class="k">Setup</span><span class="v">10 minutes each</span></li>
+        <li><span class="k">Who sees</span><span class="v">Anyone who can pull</span></li>
+      </ul>
+      <p>You pull his branch, run <code>entire checkpoint explain &lt;id&gt;</code> or <code>entire search "Button"</code>, and read what his agent did and why for that commit. Your own Claude Code session can read the same checkpoints, which is the closest thing to your agent understanding his agent. This is the shared-thread idea from Amp and Warp, but inside git and without changing tools.</p>
+      <div class="limits"><strong>Limits.</strong> After the fact, not live. Granularity is a commit, so ask him to commit often during a restyle. Transcripts go into the repo; decide whether the console repo is the right home or whether a fork of the design-system repo is. CLI only, no web viewer, so not a phone thing.</div>
+      <details>
+        <summary>Setup</summary>
+<pre><code>brew tap entireio/tap && brew install --cask entire
+cd console-app && entire enable       # he does this once
+# ... he works with claude as usual, commits, pushes ...
+git pull && entire checkpoint list    # you, on your laptop
+entire checkpoint explain 3f2a9c1</code></pre>
+      </details>
+    </article>
+
+    <article class="opt lead">
+      <header><span class="num">03</span><span class="tag">Best live view of everyone's agents</span><h3>Every tool call posts to a dashboard on the LAN</h3></header>
+      <p>Claude Code fires a hook at about thirty moments per session: before and after every tool call, on failure, on permission requests, on stop. A hook can be an HTTP POST of the event JSON to any URL. Point it at a small server on a spare office machine and you have a live timeline of every agent in the room, per person, per session. Two open-source dashboards already do this.</p>
       <ul class="specs">
         <li><span class="k">Live</span><span class="pill ok">Under a second</span></li>
-        <li><span class="k">Phone</span><span class="pill ok">Any browser on Wi-Fi</span></li>
+        <li><span class="k">Phone</span><span class="pill ok">Browser on Wi-Fi</span></li>
         <li><span class="k">Setup</span><span class="v">An evening</span></li>
         <li><span class="k">Who sees</span><span class="v">Whole team, all machines</span></li>
       </ul>
-      <p>You see, for his session: which file it is editing, what command it ran, what came back, and above all the <code>PostToolUseFailure</code> and permission events, which is where "the agent is stuck on my design system" actually shows up. Because the payload carries the tool input, you can filter for edits to files under his design-system folder and ignore the rest. Your own sessions land on the same board, so he can watch you too.</p>
-      <div class="limits"><strong>Limits.</strong> The reference dashboards are demo-grade: no login, SQLite, one Bun process. Fine on a trusted office LAN, not for exposing beyond it. Hooks do not carry the model's reasoning text, only the actions; pair with option 02 or an export for the "why".</div>
+      <p>You see which file his agent is editing, what it ran, what came back, and the <code>PostToolUseFailure</code> and permission events, which is where "stuck on my design system" shows up. Payloads carry the tool input, so you can filter for edits under his design-system folder. Your sessions land on the same board.</p>
+      <div class="limits"><strong>Limits.</strong> Reference dashboards are demo-grade: no login, SQLite, one process. Fine on a trusted LAN. Hooks carry actions, not the model's reasoning text. Pair with 01 or 02 for the why.</div>
       <details>
-        <summary>What it looks like in practice</summary>
-        <p>Two candidates, both consuming the same hook feed:</p>
+        <summary>Candidates and config</summary>
         <ul>
-          <li><strong>claude-code-hooks-multi-agent-observability</strong> (disler, ~1.5k stars). Swim lane per session, live pulse chart, event filters, chat transcripts. A Bun server on port 4000 and a Vue client on 5173. Hooks are shell scripts that POST to <code>/events</code>, so the endpoint can be another machine.</li>
-          <li><strong>agents-observe</strong> (simple10, ~650 stars, actively maintained). Installs as a Claude Code plugin, shows tool calls, file operations, subagent tree, token stats and session replay on port 4981. Built for one machine; pointing it at a shared box needs a small patch.</li>
+          <li><strong>disler/claude-code-hooks-multi-agent-observability</strong> (~1.5k stars): swim lane per session, live chart, filters. Bun server on :4000, Vue client on :5173. Hooks are scripts that POST to <code>/events</code>, so the endpoint can be another machine.</li>
+          <li><strong>simple10/agents-observe</strong> (~650 stars, maintained): installs as a Claude Code plugin, shows tool calls, file ops, subagent tree, replay, on :4981. Built for one machine; a shared box needs a small patch.</li>
         </ul>
-        <p>The hook config that makes any of this work sits in his <code>.claude/settings.json</code>. The <code>Notification</code> and <code>Stop</code> events are the ones worth turning into a phone ping.</p>
 <pre><code>{
   "hooks": {
     "PostToolUse": [{ "matcher": "Edit|Write|Bash",
-      "hooks": [{ "type": "http",
-                  "url": "http://lan-box:4000/events" }] }],
-    "PostToolUseFailure": [{ "hooks": [{ "type": "http",
-                  "url": "http://lan-box:4000/events" }] }],
-    "Stop": [{ "hooks": [{ "type": "http",
-                  "url": "http://lan-box:4000/events" }] }]
+      "hooks": [{ "type": "http", "url": "http://lan-box:4000/events" }] }],
+    "PostToolUseFailure": [{ "hooks": [{ "type": "http", "url": "http://lan-box:4000/events" }] }],
+    "Stop": [{ "hooks": [{ "type": "http", "url": "http://lan-box:4000/events" }] }]
   }
 }</code></pre>
-        <p>Because a hook can also refuse an action, the same mechanism can later enforce the design system: a hook that runs your check script after every edit and blocks the turn with a reason when a raw hex colour sneaks in.</p>
+        <p>Hooks can also block. Later, a hook can run your design-system check after every edit and refuse the turn when a raw hex colour appears.</p>
       </details>
     </article>
 
     <article class="opt">
-      <header>
-        <span class="num">04</span>
-        <h3>OpenTelemetry to a collector, dashboards in Grafana</h3>
-      </header>
-      <p>Claude Code has built-in OpenTelemetry export, the industry-standard way to ship metrics and logs to a monitoring stack. Six environment variables turn it on. It emits cost, tokens, lines changed, and an event per prompt, per tool result and per API call. By default the content is redacted; flags like <code>OTEL_LOG_TOOL_DETAILS</code> and <code>OTEL_LOG_ASSISTANT_RESPONSES</code> add what the agent said and did.</p>
+      <header><span class="num">04</span><h3>OpenTelemetry to a collector, Grafana on top</h3></header>
+      <p>Claude Code has built-in OpenTelemetry export. Six environment variables turn it on. It emits cost, tokens, lines changed, and an event per prompt, tool result and API call. Content is redacted by default; <code>OTEL_LOG_TOOL_DETAILS</code> and <code>OTEL_LOG_ASSISTANT_RESPONSES</code> add what the agent said and did.</p>
       <ul class="specs">
         <li><span class="k">Live</span><span class="pill ok">5 s batches</span></li>
         <li><span class="k">Phone</span><span class="pill warn">Grafana, cramped</span></li>
         <li><span class="k">Setup</span><span class="v">A day, then free</span></li>
         <li><span class="k">Who sees</span><span class="v">Whole org, by policy</span></li>
       </ul>
-      <p>This is the fleet view. An admin can push the settings to every developer through managed settings, so all agents in the company report to one collector without anyone opting in. Grafana already has a Claude Code integration and community dashboards. It answers "how much, how often, who, at what cost" very well and "what exactly went wrong with my Button component" less well than option 03.</p>
-      <div class="limits"><strong>Limits.</strong> Someone has to run a collector plus a store (Prometheus and Loki, or ClickHouse). The content flags mean prompts and responses sit in that store, so agree on retention. Traces are still beta.</div>
+      <p>This is the fleet view. An admin pushes the settings to everyone through managed settings, so every agent in the company reports to one collector without opt-in. Grafana has a Claude Code integration and community dashboards. Good at "how much, who, at what cost". Worse than 03 at "what went wrong with Button".</p>
+      <div class="limits"><strong>Limits.</strong> Someone runs a collector plus a store. Content flags put prompts and responses in that store, so agree on retention. Traces are beta.</div>
       <details>
-        <summary>The switch-on</summary>
+        <summary>Switch-on</summary>
 <pre><code>CLAUDE_CODE_ENABLE_TELEMETRY=1
 OTEL_METRICS_EXPORTER=otlp
 OTEL_LOGS_EXPORTER=otlp
@@ -451,24 +423,21 @@ OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 OTEL_EXPORTER_OTLP_ENDPOINT=http://lan-box:4318
 OTEL_LOG_TOOL_DETAILS=1
 OTEL_RESOURCE_ATTRIBUTES=team=console,person=him</code></pre>
-        <p>The events you would chart: <code>claude_code.tool_result</code> with <code>success</code>, <code>tool_name</code> and <code>error_type</code>, and <code>claude_code.user_prompt</code> to line the failures up against what was asked. Options 03 and 04 are not either-or; there are bridges that turn hook events into OpenTelemetry spans so the detail of 03 lands in the dashboards of 04.</p>
+        <p>Events to chart: <code>claude_code.tool_result</code> with <code>success</code>, <code>tool_name</code>, <code>error_type</code>; <code>claude_code.user_prompt</code> to line failures up with what was asked. Bridges exist that turn hook events into OTel spans, so 03's detail can land in 04's dashboards.</p>
       </details>
     </article>
 
     <article class="opt">
-      <header>
-        <span class="num">05</span>
-        <h3>GitLab runs the agent, and you press the button</h3>
-      </header>
-      <p>This changes who owns the environment. GitLab maintains a beta integration that runs Claude Code inside a CI job: one job in <code>.gitlab-ci.yml</code> and one masked API key. You trigger it from the "Run pipeline" button on your phone, type the task as a pipeline variable, and the result arrives as a merge request with a diff you can comment on. Self-managed GitLab is supported.</p>
+      <header><span class="num">05</span><h3>GitLab runs the agent. You press the button.</h3></header>
+      <p>GitLab maintains a beta integration that runs Claude Code in a CI job: one job in <code>.gitlab-ci.yml</code>, one masked API key. You trigger it from "Run pipeline" on your phone, type the task as a pipeline variable, get a merge request back with a diff. Self-managed GitLab works.</p>
       <ul class="specs">
         <li><span class="k">Live</span><span class="pill warn">Job log</span></li>
         <li><span class="k">Phone</span><span class="pill ok">GitLab web UI</span></li>
         <li><span class="k">Setup</span><span class="v">Half a day + runner</span></li>
         <li><span class="k">Who sees</span><span class="v">Anyone in the project</span></li>
       </ul>
-      <p>You see the job log while it runs and the MR when it finishes. More importantly, you can re-run the restyle yourself after changing the design system, without touching his laptop and without waiting for him. That is the "I have no control over his environment" problem solved by giving both of you the same environment. If your company has GitLab Premium or Ultimate with Duo, the Agent Platform's Sessions page shows each agent run step by step with approve and reject checkpoints, which is the most phone-native version of all of this.</p>
-      <div class="limits"><strong>Limits.</strong> Beta, maintained by GitLab rather than Anthropic. Each run is a fresh session with no memory. Mention triggers on <code>@claude</code> need a small webhook listener you host yourself; a community project ships one. Pipelines cost runner minutes and API tokens.</div>
+      <p>The point is not the log. It is that you can re-run the restyle yourself after changing the design system, without his laptop. Both of you get the same environment. If the company has GitLab Premium or Ultimate with Duo, the Agent Platform's Sessions page shows each run step by step with approve and reject checkpoints. That is the most phone-native version of all this.</p>
+      <div class="limits"><strong>Limits.</strong> Beta. Fresh session per run, no memory. <code>@claude</code> mention triggers need a small webhook listener you host; a community project ships one. Runner minutes and API tokens cost money.</div>
       <details>
         <summary>The job, trimmed</summary>
 <pre><code>claude:
@@ -485,78 +454,113 @@ OTEL_RESOURCE_ATTRIBUTES=team=console,person=him</code></pre>
     - claude -p "${AI_FLOW_INPUT:-Apply the design system to the console}"
         --permission-mode acceptEdits
         --allowedTools "Bash Read Edit Write mcp__gitlab"</code></pre>
-        <p>The prompt can be short because the rules live in the repo's <code>CLAUDE.md</code>, which the job reads like any session would.</p>
       </details>
     </article>
 
     <article class="opt">
-      <header>
-        <span class="num">06</span>
-        <h3>A chat channel for pings and questions</h3>
-      </header>
-      <p>Channels are a research-preview feature where a Telegram or Discord bot pushes messages into a running session and Claude replies in the same chat. He allowlists your sender ID, and you can ask his agent "what did the Button migration do?" from your phone and get an answer. A cheaper version, with no preview flags, is a <code>Stop</code> or <code>Notification</code> hook that posts to a Discord or Slack webhook so you know when a run finished or is waiting for permission.</p>
+      <header><span class="num">06</span><h3>A chat channel for pings and questions</h3></header>
+      <p>Channels (research preview) let a Telegram or Discord bot push messages into a running session and Claude reply in the same chat. He allowlists your sender ID; you ask his agent "what did the Button migration do?" from your phone. Cheaper and not preview: a <code>Stop</code> or <code>Notification</code> hook that posts to a Discord or Slack webhook, so you know when a run finished or is waiting on permission.</p>
       <ul class="specs">
         <li><span class="k">Live</span><span class="pill ok">Push</span></li>
-        <li><span class="k">Phone</span><span class="pill ok">It is a chat</span></li>
+        <li><span class="k">Phone</span><span class="pill ok">It's a chat</span></li>
         <li><span class="k">Setup</span><span class="v">An hour</span></li>
         <li><span class="k">Who sees</span><span class="v">Allowlisted senders</span></li>
       </ul>
-      <div class="limits"><strong>Limits.</strong> Research preview; syntax may change. Team and Enterprise organisations must have an Owner enable channels. Anyone on the allowlist can also approve tool permissions if the channel relays them, so treat it as handing over a key. Not available on Bedrock or gateway setups.</div>
+      <div class="limits"><strong>Limits.</strong> Preview; syntax may change. Team and Enterprise orgs need an Owner to enable channels. Anyone on the allowlist can approve tool permissions if the channel relays them. Not on Bedrock or gateway setups.</div>
+    </article>
+
+    <article class="opt">
+      <header><span class="num">07</span><h3>His terminal in your phone's browser</h3></header>
+      <p>The screen-share idea, done with one binary. <code>ttyd</code> serves any terminal as a web page, read-only by default, with a password, over the LAN. Warp does the same for its own agent sessions with a nicer viewer, but only for Warp's agent.</p>
+      <ul class="specs">
+        <li><span class="k">Live</span><span class="pill ok">Yes</span></li>
+        <li><span class="k">Phone</span><span class="pill warn">Wraps badly</span></li>
+        <li><span class="k">Setup</span><span class="v">10 minutes</span></li>
+        <li><span class="k">Who sees</span><span class="v">Anyone with the URL</span></li>
+      </ul>
+      <div class="limits"><strong>Limits.</strong> Synchronous. Nothing recorded. No search, no filter. One afternoon of pairing, not weeks of iteration.</div>
+      <details>
+        <summary>Commands</summary>
+<pre><code>tmux new -s restyle        # then run: claude
+ttyd -i 0.0.0.0 -c you:pass tmux attach -t restyle
+# you open http://his-ip:7681</code></pre>
+      </details>
     </article>
 
   </div>
 
+  <h2 id="products">Products built for this</h2>
+  <p>You asked whether companies have done "multiple people's agents at the same time". Yes. Here is who, what a teammate can actually do, and what each would cost you in tool changes. "Read" means open someone else's run and see the transcript. "Steer" means send it a message.</p>
+  <div class="tablewrap">
+  <table class="cmp">
+    <thead><tr><th>Product</th><th>Teammate can</th><th>Runs where</th><th>Self-hosted GitLab</th><th>Phone</th><th>Cost to you</th></tr></thead>
+    <tbody>
+      <tr><td>Amp (Sourcegraph)</td><td><span class="y">Read</span>. Threads are shared with the workspace by default; every member can open any thread. Thread Map shows agent activity.</td><td>Your laptop; threads sync to ampcode.com</td><td><span class="y">n/a</span>, git is local</td><td><span class="y">Web</span></td><td>Different agent, different models. The closest to what you described, but a switch.</td></tr>
+      <tr><td>Warp / Oz</td><td><span class="y">Read + steer</span>. "All" tab shows teammates' shared cloud agent sessions; authorized teammates attach and steer a running task.</td><td>Warp cloud, or Warp terminal locally</td><td><span class="m">Check</span></td><td><span class="y">Web</span></td><td>Warp's agent, not Claude Code. Cloud runs need repo access from Warp.</td></tr>
+      <tr><td>Cursor Cloud Agents</td><td><span class="y">Read</span> others' cloud agents; <span class="m">steer</span> if an admin enables "team follow-ups".</td><td>Cursor cloud</td><td><span class="m">Teams/Enterprise + GitLab Premium</span>; forum reports of bugs on self-hosted</td><td><span class="y">Web + app</span></td><td>New editor, new agent, cloud-only for the shared part.</td></tr>
+      <tr><td>Devin (Cognition)</td><td><span class="y">Read</span>. "Session Subscribers" follow others' sessions; Devin Local has "Share Conversation" with a team-visible link.</td><td>Devin cloud, or Devin Local</td><td><span class="m">Enterprise / VPC</span></td><td><span class="y">Web + Slack</span></td><td>Different agent, per-seat pricing, cloud-centric.</td></tr>
+      <tr><td>OpenAI Codex cloud</td><td><span class="m">Admin visibility</span>: workspace monitoring and analytics; task sharing is per link.</td><td>OpenAI cloud</td><td><span class="y">Yes</span>, GitLab 19.0+, admin enables</td><td><span class="y">Web + app</span></td><td>Different agent and model.</td></tr>
+      <tr><td>Factory Droids</td><td><span class="m">Analytics</span> across the org, not session viewing.</td><td>Local CLI + cloud</td><td><span class="m">Enterprise plan</span></td><td>Web</td><td>Different agent; enterprise pricing.</td></tr>
+      <tr><td>GitHub Copilot coding agent</td><td><span class="y">Read</span> agent sessions on the PR.</td><td>GitHub cloud</td><td><span class="n">No</span>, GitHub only</td><td>Web</td><td>Not applicable to you.</td></tr>
+      <tr><td>Claude Code on the web + Claude in Slack</td><td><span class="y">Read</span>. Team visibility on cloud sessions; Slack-started sessions are Team-visible by default. Self-hosted runners can run them inside your network.</td><td>Anthropic cloud or your runners</td><td><span class="n">No</span>. Cloud sessions clone from GitHub only, even self-hosted. GitLab open request.</td><td><span class="y">App</span></td><td>Zero tool change, but blocked by the GitHub-only rule.</td></tr>
+      <tr><td>Omnara, Happy (open source)</td><td><span class="m">Per user</span>: a "command center" for your own Claude Code and Codex sessions across your machines. Happy self-hosts with one Docker Compose.</td><td>Your laptop + relay</td><td><span class="y">n/a</span></td><td><span class="y">App</span></td><td>Solves phone access to your own sessions, not seeing his.</td></tr>
+      <tr><td>Entire (option 02)</td><td><span class="y">Read</span> any session whose commit you can pull.</td><td>Your laptops + git</td><td><span class="y">Yes</span></td><td><span class="n">CLI</span></td><td>One CLI, keeps Claude Code.</td></tr>
+      <tr><td>Coder Tasks</td><td colspan="5">Was the self-hosted answer: Claude Code in Coder workspaces with a team task board. Being removed from Coder from v2.37 (September 2026). Don't start on it.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>What this means for you two.</strong> The pattern every one of these products converges on is the same: agent runs live in a shared place with a URL, teammates open them, some let you talk to them. Anthropic's version exists and is the least disruptive, and it is blocked by one line in the docs: cloud sessions clone from GitHub only. If that changes, Claude Code on the web with a self-hosted runner in your office is the answer and everything else here becomes optional. Until then, option 02 gives you the shared-thread benefit through git, and option 03 gives you the live board. Switching both of you to Amp or Warp to get this is more change than the problem is worth.</p>
+
   <h2>Can the agents talk to each other?</h2>
-  <p>Only in the narrow cases Claude Code supports today. The table is the honest map; the pattern below it is what works between two people.</p>
   <div class="tablewrap">
   <table>
     <thead><tr><th>Between</th><th>Works?</th><th>How</th></tr></thead>
     <tbody>
-      <tr><td>Two of his sessions, same laptop</td><td><span class="pill ok">Yes</span></td><td>Over a local socket, no servers. Claude uses <code>ListAgents</code> and <code>SendMessage</code> on its own.</td></tr>
-      <tr><td>His session and his cloud session, or his other machine</td><td><span class="pill ok">Yes</span></td><td>Through Anthropic servers, only while Remote Control is on, only within his account.</td></tr>
-      <tr><td>Subagents or an agent team inside one session</td><td><span class="pill ok">Yes</span></td><td>Built in; agent teams are experimental and single-machine.</td></tr>
-      <tr><td><strong>His session and your session</strong></td><td><span class="pill bad">No</span></td><td>No cross-account messaging exists. A2A, the industry agent-to-agent protocol, hit 1.0 this year but Claude Code does not speak it.</td></tr>
+      <tr><td>Two of his sessions, same laptop</td><td><span class="pill ok">Yes</span></td><td>Local socket, no servers. Claude uses <code>ListAgents</code> and <code>SendMessage</code> on its own.</td></tr>
+      <tr><td>His session and his cloud or other-machine session</td><td><span class="pill ok">Yes</span></td><td>Through Anthropic, only while Remote Control is on, only within his account.</td></tr>
+      <tr><td>Subagents or an agent team in one session</td><td><span class="pill ok">Yes</span></td><td>Built in. Agent teams are experimental and single-machine.</td></tr>
+      <tr><td><strong>His session and yours</strong></td><td><span class="pill bad">No</span></td><td>No cross-account messaging. A2A, the industry protocol, hit 1.0 this year; Claude Code does not speak it.</td></tr>
     </tbody>
   </table>
   </div>
-  <h3>The mailbox that does work: a GitLab issue with a fixed shape</h3>
-  <p>Give both agents the same place to write and the same template to write in. His agent files an issue labelled <code>ds-feedback</code> in the design-system project whenever the system blocks it: a token that does not exist, a component state that is missing, a rule that contradicts another. Your agent reads open issues when you start a session, proposes the change, and closes the issue with the version that fixes it. You triage from your phone in between. The instruction lives in his repo's <code>CLAUDE.md</code>, so it is enforced every session, and the agent can use the GitLab MCP server or the <code>glab</code> command to post.</p>
-<pre><code>## DS feedback (filed by the agent, do not edit the headings)
+  <h3>The mailbox that works: a GitLab issue with a fixed shape</h3>
+  <p>Same place, same template, both agents. His agent files an issue labelled <code>ds-feedback</code> in the design-system project whenever the system blocks it: a missing token, a missing component state, two rules that contradict. Your agent reads open issues at session start, proposes the change, closes the issue with the fixing version. You triage from your phone in between. The rule lives in his <code>CLAUDE.md</code>, so it applies every session. The agent posts via the GitLab MCP server or <code>glab</code>.</p>
+<pre><code>## DS feedback (filed by the agent, keep the headings)
 Component: Button
 Where: src/console/panels/ArmToggle.tsx:42
 Needed: a "danger" variant with a pressed state
 Tried: primary + custom bg — rejected by ds:check (raw hex)
 Design-system version: 0.4.2
 Blocking: yes</code></pre>
-  <p>This is the same shape a human bug report has, which is the point: the misunderstanding you sense between the two of you is mostly that neither agent knows what the other one was missing. A form fixes that better than a protocol.</p>
+  <p>Add Entire and the loop closes: the issue links the commit, the commit links the checkpoint, and your agent can read exactly what his tried before it gave up.</p>
 
   <h2>Replace the zip</h2>
-  <p>A zip is a pile of files with no version, no rules the agent loads automatically, and no way to tell whether it applied them. A repository on your GitLab with the following layout fixes each of those. Nothing here needs git skill beyond editing a file in GitLab's web editor and pressing Commit, which works from a phone.</p>
+  <p>A zip has no version, no rules the agent loads by itself, and no way to tell whether it applied them. This layout in a repo on your GitLab fixes each. Editing a file in GitLab's web editor and pressing Commit works from a phone.</p>
   <div class="tree"><span class="hi">design-system/</span>
-├── <span class="hi">DESIGN.md</span>            <span class="c">colours, type, spacing, do's and don'ts, in prose + YAML</span>
-├── <span class="hi">tokens.json</span>          <span class="c">the same values as W3C DTCG design tokens, greppable JSON</span>
+├── <span class="hi">DESIGN.md</span>            <span class="c">colours, type, spacing, do's and don'ts, prose + YAML</span>
+├── <span class="hi">tokens.json</span>          <span class="c">same values as W3C DTCG design tokens, greppable JSON</span>
 ├── <span class="hi">CLAUDE.md</span>            <span class="c">rules his agent loads every session; imports DESIGN.md</span>
 ├── src/                 <span class="c">the real components, as now</span>
-├── stories/             <span class="c">Storybook, optional, gives the agent a docs API</span>
+├── stories/             <span class="c">Storybook, optional; gives the agent a docs API</span>
 ├── scripts/<span class="hi">ds-check</span>     <span class="c">stylelint rule: no raw colours or spacing, tokens only</span>
 ├── .claude/
-│   ├── skills/apply-design-system/SKILL.md   <span class="c">the how-to, step by step</span>
+│   ├── skills/apply-design-system/SKILL.md   <span class="c">the how-to</span>
 │   └── settings.json    <span class="c">hooks: run ds-check after edits, post events to the LAN box</span>
 ├── .gitlab/issue_templates/ds-feedback.md    <span class="c">the mailbox shape</span>
-└── CHANGELOG.md         <span class="c">what changed per version, agents read this first</span></div>
-  <p><strong>Why each line helps an agent.</strong> <code>DESIGN.md</code> is a Google-backed format from March 2026 that Claude Code, Cursor and Gemini all read; its linter validates token references and contrast and prints JSON. <code>tokens.json</code> in the W3C DTCG format, stable since October 2025, is the one thing every tool in the chain agrees on. <code>CLAUDE.md</code> is the only file Claude Code loads without being asked, so the two-line rule "use components from this package, never raw hex, file a ds-feedback issue when blocked" belongs there. The check script is what turns "did it get it right" from your eyeballs into a command the agent runs itself, and a hook can run it after every edit.</p>
-  <p><strong>How it reaches him.</strong> Three routes, pick by how much CI you want: he clones the repo and adds it with <code>--add-dir</code>; or CI publishes the components as an npm package to the GitLab package registry so his app pins a version; or you turn the <code>.claude</code> folder into a Claude Code plugin and the repo into a private plugin marketplace, which his session installs with one command. The plugin route also ships the hooks and the skill, so his monitoring is configured by you, not by him.</p>
-  <div class="note">Your own visual-cook skill is a good model here: it already ships as a single <code>SKILL.md</code> that a session auto-discovers. The design system wants the same shape, plus tokens and a check.</div>
+└── CHANGELOG.md         <span class="c">what changed per version; agents read this first</span></div>
+  <p><strong>Why each line.</strong> <code>DESIGN.md</code> is Google's format from March 2026; Claude Code, Cursor and Gemini read it, and its linter checks token references and contrast and prints JSON. <code>tokens.json</code> in DTCG, stable since October 2025, is the one format every tool in the chain agrees on. <code>CLAUDE.md</code> is the only file Claude Code loads unasked, so the rule "components from this package, never raw hex, file ds-feedback when blocked" goes there. The check script turns "did it get it right" into a command the agent runs itself, and a hook can run it after every edit.</p>
+  <p><strong>How it reaches him.</strong> He clones the repo and adds it with <code>--add-dir</code>; or CI publishes the components as an npm package to the GitLab package registry and his app pins a version; or the <code>.claude</code> folder becomes a Claude Code plugin and the repo a private marketplace, installed with one command. The plugin route ships the hooks and the skill too, so you configure his monitoring, not him.</p>
+  <div class="note">Your visual-cook skill already has this shape: a single <code>SKILL.md</code> a session auto-discovers. The design system wants the same, plus tokens and a check.</div>
 
-  <h2>The plan I would run</h2>
+  <h2>The plan</h2>
   <div class="plan">
     <div class="phase">
-      <div class="when">Today<small>zero engineering</small></div>
+      <div class="when">Today<small>zero infrastructure</small></div>
       <div>
         <ul>
-          <li>He starts his next run with <code>claude --remote-control</code>, shares the session link with Team visibility, and you check the toggle exists. You read the transcript and diff on your phone.</li>
-          <li>At the end of each run he types <code>/export</code> and drops the file in a shared folder. That is your archive.</li>
-          <li>You add the ds-feedback issue template to the GitLab project and the two-line rule to his <code>CLAUDE.md</code>. From now on the agent tells you what it was missing.</li>
+          <li>He runs <code>entire enable</code> in the console repo and commits often during restyles. You pull and read checkpoints. Ten minutes each.</li>
+          <li>He starts runs with <code>claude --remote-control</code> and shares the link with Team visibility. Check the toggle exists.</li>
+          <li>Add the ds-feedback issue template and the two-line rule to his <code>CLAUDE.md</code>.</li>
         </ul>
       </div>
     </div>
@@ -564,8 +568,8 @@ Blocking: yes</code></pre>
       <div class="when">This week<small>one evening each</small></div>
       <div>
         <ul>
-          <li>Move the zip into the repo layout above, with <code>tokens.json</code>, <code>DESIGN.md</code> and the check script. Version it. Write the changelog by hand for now.</li>
-          <li>Stand up the hook dashboard (option 03) on any spare machine. Both of you point your hooks at it. This is the "see each other's agents" you asked for, and it covers your sessions too.</li>
+          <li>Zip becomes the repo layout above: <code>tokens.json</code>, <code>DESIGN.md</code>, check script, changelog, version.</li>
+          <li>Hook dashboard (option 03) on a spare machine. Both laptops point hooks at it.</li>
         </ul>
       </div>
     </div>
@@ -573,51 +577,56 @@ Blocking: yes</code></pre>
       <div class="when">When it earns it<small>signals to wait for</small></div>
       <div>
         <ul>
-          <li>You find yourself waiting for him to re-run things: add the GitLab CI job (option 05) so you can run a restyle against a branch yourself.</li>
-          <li>A third person wants in, or someone asks about cost: switch on OpenTelemetry (option 04) with managed settings for everyone.</li>
-          <li>He keeps asking "which component do I use for X": publish Storybook and its MCP server so the agent can query component docs instead of guessing.</li>
+          <li>You keep waiting for him to re-run things: add the GitLab CI job (05).</li>
+          <li>A third person joins, or someone asks about cost: OpenTelemetry (04) via managed settings.</li>
+          <li>He keeps asking which component to use: publish Storybook with its MCP server.</li>
+          <li>Anthropic adds GitLab to cloud sessions: move to Claude Code on the web with a self-hosted runner and drop most of the above.</li>
         </ul>
       </div>
     </div>
   </div>
 
   <h2>Vocabulary</h2>
-  <p>The terms the options above lean on, in one line each.</p>
   <dl>
-    <dt>Hook</dt><dd>A script or URL Claude Code calls at a named moment, such as after a tool runs. It gets the event as JSON and can log it, or block the action with a reason.</dd>
-    <dt>OpenTelemetry (OTel)</dt><dd>A vendor-neutral standard for sending metrics, logs and traces from software to a monitoring backend. A collector receives them; Grafana draws them.</dd>
+    <dt>Hook</dt><dd>A script or URL Claude Code calls at a named moment, like after a tool runs. Gets the event as JSON. Can log it or block the action.</dd>
+    <dt>OpenTelemetry (OTel)</dt><dd>Standard for shipping metrics, logs and traces to a monitoring backend. A collector receives; Grafana draws.</dd>
     <dt>Remote Control</dt><dd>Claude Code's mirror of a local session to claude.ai and the phone app. Execution stays on the laptop; the account that started it owns it.</dd>
-    <dt>Cross-session messaging</dt><dd>One Claude session sending plain text to another of the same person's sessions. Same machine uses a local socket; other machines go through Anthropic.</dd>
-    <dt>MCP server</dt><dd>A small program that gives an agent tools or documents on request, like "list the components" or "run this story's tests". Storybook, Figma and GitLab all offer one.</dd>
-    <dt>Skill and plugin</dt><dd>A skill is a Markdown how-to the agent loads when relevant. A plugin bundles skills, hooks and MCP servers so one install configures everything.</dd>
-    <dt>Merge request (MR)</dt><dd>GitLab's name for a pull request: a proposed change with a diff people can comment on line by line, and CI results attached.</dd>
-    <dt>Design tokens (DTCG)</dt><dd>Your colours, sizes and type as named values in a JSON format standardised by the W3C community group. Style Dictionary and Tokens Studio read and write it.</dd>
-    <dt>DESIGN.md</dt><dd>A Markdown file with YAML front matter that describes a design system for agents, with a linter and exporters to Tailwind, CSS and tokens.</dd>
+    <dt>Checkpoint (Entire)</dt><dd>An agent session stored in git refs next to the commit it produced. Readable by anyone who can pull.</dd>
+    <dt>Cross-session messaging</dt><dd>One Claude session sending text to another session of the same person. Same machine uses a socket; other machines go through Anthropic.</dd>
+    <dt>MCP server</dt><dd>A small program that gives an agent tools or documents on request. Storybook, Figma and GitLab all offer one.</dd>
+    <dt>Skill, plugin</dt><dd>A skill is a Markdown how-to the agent loads when relevant. A plugin bundles skills, hooks and MCP servers so one install configures everything.</dd>
+    <dt>Merge request (MR)</dt><dd>GitLab's pull request: a proposed change with a diff, line comments, CI results.</dd>
+    <dt>Design tokens (DTCG)</dt><dd>Colours, sizes, type as named values in a W3C community group JSON format. Style Dictionary and Tokens Studio read and write it.</dd>
+    <dt>DESIGN.md</dt><dd>Markdown plus YAML front matter describing a design system for agents, with a linter and exporters to Tailwind, CSS and tokens.</dd>
   </dl>
 
   <h2>Sources</h2>
-  <p>Claude Code facts were checked against the official docs on 2 September 2026. Ecosystem claims come from the projects' own repositories and release notes; two domains (GitLab docs and Grafana) were read through mirrors, noted where it matters.</p>
+  <p>Claude Code facts checked against the official docs on 2 September 2026. Product claims come from vendor docs, repos and release notes. Some vendor domains were blocked from here (Warp, Devin, GitLab docs), so those rows rest on search summaries and forum posts; marked "check" where it matters.</p>
   <ul class="sources">
-    <li>Monitoring and OpenTelemetry export: <a href="https://code.claude.com/docs/en/monitoring-usage">code.claude.com/docs/en/monitoring-usage</a></li>
-    <li>Hooks reference, including HTTP hooks: <a href="https://code.claude.com/docs/en/hooks">code.claude.com/docs/en/hooks</a></li>
+    <li>Monitoring and OpenTelemetry: <a href="https://code.claude.com/docs/en/monitoring-usage">code.claude.com/docs/en/monitoring-usage</a></li>
+    <li>Hooks reference: <a href="https://code.claude.com/docs/en/hooks">code.claude.com/docs/en/hooks</a></li>
     <li>Remote Control: <a href="https://code.claude.com/docs/en/remote-control">code.claude.com/docs/en/remote-control</a></li>
-    <li>Sharing sessions on claude.ai/code: <a href="https://code.claude.com/docs/en/claude-code-on-the-web">code.claude.com/docs/en/claude-code-on-the-web</a></li>
+    <li>Cloud sessions, sharing, GitHub-only rule: <a href="https://code.claude.com/docs/en/claude-code-on-the-web">code.claude.com/docs/en/claude-code-on-the-web</a></li>
+    <li>Self-hosted environments (Team/Enterprise beta, GitHub only): <a href="https://code.claude.com/docs/en/self-hosted-environments">code.claude.com/docs/en/self-hosted-environments</a></li>
     <li>Cross-session messaging: <a href="https://code.claude.com/docs/en/cross-session-messaging">code.claude.com/docs/en/cross-session-messaging</a></li>
     <li>Channels: <a href="https://code.claude.com/docs/en/channels">code.claude.com/docs/en/channels</a></li>
-    <li>Agent view, local only: <a href="https://code.claude.com/docs/en/agent-view">code.claude.com/docs/en/agent-view</a></li>
-    <li>GitLab CI/CD integration (beta): <a href="https://code.claude.com/docs/en/gitlab-ci-cd">code.claude.com/docs/en/gitlab-ci-cd</a></li>
-    <li>Plugins and marketplaces: <a href="https://code.claude.com/docs/en/plugins">code.claude.com/docs/en/plugins</a>, <a href="https://code.claude.com/docs/en/plugin-marketplaces">plugin-marketplaces</a></li>
-    <li>Multi-user session sharing requests: <a href="https://github.com/anthropics/claude-code/issues/40981">issue 40981</a>, <a href="https://github.com/anthropics/claude-code/issues/60082">issue 60082</a></li>
-    <li>Hook dashboards: <a href="https://github.com/disler/claude-code-hooks-multi-agent-observability">disler/claude-code-hooks-multi-agent-observability</a>, <a href="https://github.com/simple10/agents-observe">simple10/agents-observe</a></li>
-    <li>Hook-to-OTel bridge: <a href="https://github.com/o11y-dev/opentelemetry-hooks">o11y-dev/opentelemetry-hooks</a></li>
-    <li>Grafana Claude Code dashboards: <a href="https://grafana.com/grafana/dashboards/25052-claude-code/">25052</a>, <a href="https://grafana.com/grafana/dashboards/25255-claude-code-metrics-prometheus/">25255</a></li>
-    <li>Terminal in a browser: <a href="https://github.com/tsl0922/ttyd">tsl0922/ttyd</a></li>
-    <li>GitLab webhook listener for @claude mentions: <a href="https://github.com/RealMikeChong/claude-code-for-gitlab">RealMikeChong/claude-code-for-gitlab</a></li>
-    <li>GitLab Duo Agent Platform sessions and external agents: <a href="https://docs.gitlab.com/user/duo_agent_platform/sessions/">sessions</a>, <a href="https://docs.gitlab.com/user/duo_agent_platform/agents/external/">external agents</a></li>
-    <li>DESIGN.md: <a href="https://github.com/google-labs-code/design.md">google-labs-code/design.md</a></li>
-    <li>Design tokens format, stable 2025.10: <a href="https://www.designtokens.org/tr/2025.10/format/">designtokens.org</a></li>
-    <li>Storybook MCP: <a href="https://github.com/storybookjs/mcp/releases">storybookjs/mcp</a></li>
-    <li>Token linting: <a href="https://github.com/LasaleFamine/stylelint-design-tokens-plugin">stylelint-design-tokens-plugin</a>, <a href="https://atlassian.design/components/eslint-plugin-design-system/ensure-design-token-usage/">Atlassian ensure-design-token-usage</a></li>
-    <li>GitLab npm registry publishing: <a href="https://docs.gitlab.com/ee/user/packages/workflows/project_registry.html">project registry workflow</a></li>
+    <li>Headless streaming (<code>stream-json</code>): <a href="https://code.claude.com/docs/en/headless">code.claude.com/docs/en/headless</a></li>
+    <li>GitLab CI/CD integration: <a href="https://code.claude.com/docs/en/gitlab-ci-cd">code.claude.com/docs/en/gitlab-ci-cd</a></li>
+    <li>Multi-user sharing requests: <a href="https://github.com/anthropics/claude-code/issues/40981">40981</a>, <a href="https://github.com/anthropics/claude-code/issues/60082">60082</a>; GitLab for cloud sessions: <a href="https://github.com/anthropics/claude-code/issues/70565">70565</a></li>
+    <li>Entire CLI: <a href="https://github.com/entireio/cli">github.com/entireio/cli</a>, <a href="https://entire.io/blog/the-entire-cli-how-it-works-and-where-its-headed">how it works</a></li>
+    <li>Amp thread visibility: <a href="https://ampcode.com/manual">Amp owner's manual</a>, <a href="https://tessl.io/blog/amp-launches-thread-map-to-help-navigate-ai-coding-agent-work/">Thread Map</a></li>
+    <li>Warp cloud agents and session sharing: <a href="https://docs.warp.dev/agent-platform/cloud-agents/managing-cloud-agents">managing cloud agents</a>, <a href="https://docs.warp.dev/agent-platform/local-agents/session-sharing/">session sharing</a></li>
+    <li>Cursor cloud agents, team follow-ups, GitLab: <a href="https://cursor.com/docs/cloud-agent/settings">dashboard settings</a>, <a href="https://cursor.com/docs/integrations/gitlab">GitLab</a>, <a href="https://forum.cursor.com/t/cloud-agents-in-gitlab-self-hosted/145052">self-hosted bug thread</a></li>
+    <li>Devin sessions and sharing: <a href="https://docs.devin.ai/release-notes/2026">release notes 2026</a></li>
+    <li>Codex GitLab support: <a href="https://community.openai.com/t/gitlab-with-codex-cloud-agent/1268080">community thread</a>, <a href="https://releases.sh/openai/codex">release notes</a></li>
+    <li>Factory self-managed SCM: <a href="https://docs.factory.ai/enterprise/self-managed-scm">docs</a></li>
+    <li>Coder Tasks removal: <a href="https://coder.com/docs/ai-coder/tasks">coder.com/docs/ai-coder/tasks</a></li>
+    <li>Omnara, Happy: <a href="https://github.com/omnara-ai/omnara">omnara</a>, <a href="https://dev.to/_53fb7c03dd741a6124e4e/happy-the-open-source-app-that-puts-claude-code-in-your-pocket-7i2">Happy</a></li>
+    <li>Hook dashboards: <a href="https://github.com/disler/claude-code-hooks-multi-agent-observability">disler</a>, <a href="https://github.com/simple10/agents-observe">agents-observe</a>; hook-to-OTel bridge: <a href="https://github.com/o11y-dev/opentelemetry-hooks">o11y-dev</a></li>
+    <li>Grafana dashboards: <a href="https://grafana.com/grafana/dashboards/25052-claude-code/">25052</a>, <a href="https://grafana.com/grafana/dashboards/25255-claude-code-metrics-prometheus/">25255</a></li>
+    <li>ttyd: <a href="https://github.com/tsl0922/ttyd">tsl0922/ttyd</a>; GitLab @claude listener: <a href="https://github.com/RealMikeChong/claude-code-for-gitlab">claude-code-for-gitlab</a></li>
+    <li>GitLab Duo Agent Platform sessions: <a href="https://docs.gitlab.com/user/duo_agent_platform/sessions/">docs</a></li>
+    <li>DESIGN.md: <a href="https://github.com/google-labs-code/design.md">google-labs-code/design.md</a>; DTCG tokens: <a href="https://www.designtokens.org/tr/2025.10/format/">designtokens.org</a>; Storybook MCP: <a href="https://github.com/storybookjs/mcp/releases">storybookjs/mcp</a></li>
+    <li>Token linting: <a href="https://github.com/LasaleFamine/stylelint-design-tokens-plugin">stylelint-design-tokens-plugin</a>; GitLab npm registry: <a href="https://docs.gitlab.com/ee/user/packages/workflows/project_registry.html">docs</a></li>
   </ul>
 </main>
