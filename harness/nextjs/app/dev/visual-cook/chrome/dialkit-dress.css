@@ -1,0 +1,8 @@
+/* DialKit's inline panel on whatever ground holds it (the cook sidebar, or an older cook's own
+   aside): no card of its own, its title a section title, and the foot its floating panel has. */
+[data-dialkit-inline] .dialkit-panel-inner { background: none !important; border: none !important; border-radius: 0 !important; padding: 0 !important; backdrop-filter: none !important; box-shadow: none !important; }
+[data-dialkit-inline] .dialkit-folder-title-root { font-size: 13px !important; }
+[data-dialkit-inline] .dialkit-panel-header { border-bottom: none !important; margin-bottom: 8px !important; padding-bottom: 0 !important; }
+[data-dialkit-inline] .dialkit-panel-inline { padding-bottom: 12px !important; }
+/* In the cook sidebar the versions are the whole cook's (OneVersions), so DialKit's own, which keep only its dials, are off. */
+[data-one] .dialkit-panel-toolbar { display: none !important; }
