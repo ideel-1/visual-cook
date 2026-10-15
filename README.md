@@ -23,6 +23,21 @@ It leaves behind:
 - **One cook index** — a small `index.ts` data file behind a `/dev/visual-cook` catalog page: one row per cook, its status (`settled · superseded · abandoned · wip`), what was ruled, and whether the verdict has actually landed in prod. This is the "have we cooked this before" memory that stops dead ideas being re-cooked.
 - **One cook sidebar** — every cook in a project mounts the same sidebar from `harness/nextjs/`: the lanes, the pick-ones and the dials, the versions, what was decided and retired, and a pointing toolbar in its foot. Its state lives in the URL, so one link opens one state; what you save, decide or point at is written to a gitignored `.cook/` folder where Claude reads it.
 
+## What you set up, and what Claude does
+
+You copy `harness/nextjs/` into a Next.js App Router + Tailwind v4 app once. That copy brings the whole surface: the sidebar, the four dev routes that write to `.cook/`, the pointing toolbar's mount, and the **All cooks** page at `/dev/visual-cook` with its `index.ts`. From then on Claude makes each cook as a page that mounts the sidebar and adds a row to `index.ts`, so the All cooks page lists it without you doing anything. If the app has no harness when a cook starts, the skill tells Claude to copy it in.
+
+Every cook in an app uses that one copy, never its own. The harness exists only for Next.js + Tailwind v4. On any other stack the skill's rules still hold (lane one is what is live, one named difference per lane, the state in the URL), but Claude builds the cook without the sidebar. A copy does not follow later changes to this repo; Claude brings it current when a cook in that app starts.
+
+## Built on DialKit and Agentation
+
+Two packages do the work the sidebar would otherwise have to invent.
+
+- **[DialKit](https://github.com/joshpuckett/dialkit)** (MIT) — live controls for tuning values in a React app: sliders, switches, selects, colours. The sidebar does not use DialKit's own floating panel; it draws the dials from DialKit's parts inside the sidebar, so the dials sit under the lanes and look the same as them. A cook declares its dials once with `useUrlDials`, and each value is written to the page's address under a short name, so the link you send is the setting you chose.
+- **[Agentation](https://www.npmjs.com/package/agentation)** (PolyForm Shield 1.0.0) — a toolbar for pointing at an element on the page and writing a note on it for a coding agent. It sits in the sidebar's foot. Each note is posted to `/dev/pointed` and kept in `.cook/pointed.jsonl` with the page's address, your words and the element, so "I pointed" is enough for Claude to find what you meant. Check its licence fits your use.
+
+Both run in development only: the production build drops the toolbar and every `/dev/` page answers 404.
+
 ## v4 — the sidebar
 
 v3's chrome was a skeleton pasted into each cook, and every cook grew its own controls around it. v4 replaces that with one sidebar every cook mounts, shipped as real files in `harness/nextjs/`:
