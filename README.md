@@ -12,8 +12,6 @@ A skill for [Claude Code](https://claude.com/claude-code). When you can't say ho
 4. You answer Claude in a few characters: *"2"*, *"version 3"*, *"I pointed"*, or you paste the link.
 5. Claude makes the next round, or puts the one you chose into the real page.
 
-You never have to describe a look in words. You look and choose.
-
 ## Words you'll see
 
 | Word | What it means |
@@ -67,6 +65,8 @@ import { DevTools } from "@/components/dev/DevTools";
 <DevTools />
 ```
 
+Cooks only run on your machine: in a production build every page under `/dev/` shows "not found" and the pointing toolbar is left out.
+
 **5. Check it works.** Run `npm run dev` and open [localhost:3000/dev/visual-cook](http://localhost:3000/dev/visual-cook). You'll see the All cooks page with one cook in it, **Example**. Open it and try everything in the sidebar.
 
 When you don't need the example any more, delete `app/dev/visual-cook/example/`, `components/ExampleCard.tsx`, and its entry in `app/dev/visual-cook/index.ts`.
@@ -118,34 +118,4 @@ The sidebar uses two open packages instead of reinventing them:
 - **[DialKit](https://github.com/joshpuckett/dialkit)** by Josh Puckett (MIT) makes the **dials**: sliders, switches, dropdowns and colour pickers. They're placed inside the sidebar so they look like the rest of it, and every value is written into the page's link.
 - **[Agentation](https://www.npmjs.com/package/agentation)** (PolyForm Shield 1.0.0) makes **pointing**: click an element, write a note, and the note is saved with exactly which element you meant. Check its licence fits what you're building.
 
-## Common questions
-
-**Is it safe to ship?** Yes. Cooks only exist while you run the app locally. In a production build, every page under `/dev/` shows "not found" and the pointing toolbar isn't included.
-
-**Does every cook get its own copy of the sidebar?** No. You copy the files once per app, and every cook in that app uses that one copy. If the app doesn't have the files yet when you start a cook, Claude copies them in.
-
-**Does my copy update when this repo changes?** No. When you start a cook in that app, Claude can bring the copy up to date from the skill.
-
-**What if I'm not on Next.js?** The skill still works the same way (real components, lane 1 is what's live, one difference per lane), but the cook won't have the sidebar.
-
-## Why it works this way
-
-Most visual work goes wrong in one of three ways: arguing about vague words like "cleaner", choosing between new ideas with nothing to compare them to, or losing the decision once the conversation ends. So:
-
-- **Show, don't argue.** "How much" questions (spacing, weight, contrast, timing) are answered by looking, not by talking. A vague word like "cleaner" becomes a few lanes, one for each thing it could mean.
-- **Lane 1 is what you have now.** The question is always "does anything beat what's already there?"
-- **Each lane changes one thing,** written in its label. If two lanes can't be told apart in a few words, one of them goes.
-- **Your answer is kept where you gave it:** the link, the version, the decided pick, the note.
-
-## Versions of this skill
-
-- **v4 (Oct 2026):** the sidebar, shipped as real files in `harness/nextjs/`. Your answer is now a click or a link, not something you type out.
-- **v3:** the cook page itself is the main thing; Claude only asks you questions when every lane is rejected.
-- **v2:** cooks are kept forever as the record of what was decided, instead of a separate design document.
-- **v1:** an interview that pinned down vague design words.
-
-This repo is a published copy of a skill used daily in private projects; it's updated here when the private one changes.
-
-## Licence
-
-MIT, for this repo. DialKit and Agentation have their own licences, linked above.
+This repo is MIT.
