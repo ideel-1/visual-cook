@@ -2,7 +2,7 @@
 
 A skill for [Claude Code](https://claude.com/claude-code). When you can't say how something should look, Claude builds a few versions of it inside your real app, and you pick one by looking.
 
-![A cook: a card on a light and a dark background, with the cook sidebar on the right](docs/cook.jpg)
+https://github.com/user-attachments/assets/d224505b-cd20-41b6-917b-5b2969671455
 
 ## How it works
 
