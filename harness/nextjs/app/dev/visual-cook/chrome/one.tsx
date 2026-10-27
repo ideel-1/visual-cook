@@ -8,7 +8,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { Archive, ArrowLeft, ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Moon, PanelLeftClose, PanelRightClose, Sun, X } from 'lucide-react';
+import { Archive, ArrowLeft, ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Moon, PanelLeftClose, PanelRightClose, RotateCcw, Sun, X } from 'lucide-react';
 import { ColorControl, DialStore, Folder, Slider, TextControl, Toggle, useDialKit, type ColorConfig, type ControlMeta, type PanelConfig, type SelectConfig } from 'dialkit';
 import 'dialkit/styles.css';
 import './dialkit-dress.css';
@@ -203,7 +203,7 @@ export function OneSidebar({ bar, title, tags, sits = 'edge', collapse = 'cross'
           {header === 'right' && collapseBtn}
         </div>
         <Drift bar={bar} />
-        <OneScroll polarity={polarity} className="min-h-0 flex-1" inner="flex flex-col gap-5 px-4 pt-2 pb-5">
+        <OneScroll polarity={polarity} className="min-h-0 flex-1" inner="flex flex-col gap-5 px-4 pt-2 pb-5" keep>
           <OneVersions bar={bar} />
           {children}
           <Pointed pal={pal} />
@@ -220,13 +220,31 @@ export function OneSidebar({ bar, title, tags, sits = 'edge', collapse = 'cross'
 
 // A box that scrolls with no bar: a light shade and a blur at an edge with more past it.
 const SHADE = { dark: 'rgba(0,0,0,0.45)', light: 'rgba(0,0,0,0.07)' };
-function OneScroll({ polarity, className, inner, children }: { polarity: Polarity; className: string; inner: string; children: ReactNode }) {
+// With `keep`, the place it was scrolled to is kept for this tab and page, so a reload opens on the dial last moved;
+// the place is put back once the content below it has mounted, or given up after KEEP_WAIT_MS.
+const KEEP_WAIT_MS = 3000;
+function OneScroll({ polarity, className, inner, keep, children }: { polarity: Polarity; className: string; inner: string; keep?: boolean; children: ReactNode }) {
   const box = useRef<HTMLDivElement>(null);
   const [more, setMore] = useState({ up: false, down: false });
+  const back = useRef<number | null>(null);
+  const keyOf = () => `one-scroll:${window.location.pathname}`;
   const measure = () => {
     const el = box.current;
-    if (el) setMore({ up: el.scrollTop > 1, down: el.scrollTop + el.clientHeight < el.scrollHeight - 1 });
+    if (!el) return;
+    if (back.current != null && el.scrollHeight - el.clientHeight >= back.current) { el.scrollTop = back.current; back.current = null; }
+    setMore({ up: el.scrollTop > 1, down: el.scrollTop + el.clientHeight < el.scrollHeight - 1 });
   };
+  const scrolled = () => {
+    measure();
+    const el = box.current;
+    if (keep && el && back.current == null) try { window.sessionStorage.setItem(keyOf(), String(Math.round(el.scrollTop))); } catch { /* private mode */ }
+  };
+  useEffect(() => {
+    if (!keep) return;
+    try { const was = Number(window.sessionStorage.getItem(keyOf())); if (was > 0) back.current = was; } catch { /* private mode */ }
+    const give = window.setTimeout(() => { back.current = null; }, KEEP_WAIT_MS);
+    return () => clearTimeout(give);
+  }, [keep]);
   useEffect(() => {
     const el = box.current;
     if (!el) return;
@@ -241,7 +259,7 @@ function OneScroll({ polarity, className, inner, children }: { polarity: Polarit
   );
   return (
     <div className={`relative flex flex-col overflow-hidden ${className}`}>
-      <div ref={box} onScroll={measure} className="min-h-0 flex-1 overflow-y-auto overscroll-contain"><div className={inner}>{children}</div></div>
+      <div ref={box} onScroll={scrolled} className="min-h-0 flex-1 overflow-y-auto overscroll-contain"><div className={inner}>{children}</div></div>
       {edge('top', more.up)}
       {edge('bottom', more.down)}
     </div>
@@ -579,6 +597,16 @@ function usePanels() {
   }, []);
   return panels;
 }
+// For a lane that plays once, on a load or a mount: plays it again without a reload. The cook keys what plays on
+// a count it bumps here, and on its dials, so a moved dial plays it too.
+export function OnePlay({ bar, play }: { bar: Bar; play: () => void }) {
+  return (
+    <button onClick={play} data-play-again className={`${ONE_ROW} justify-center gap-2 ${bar.pal.itemOff}`}>
+      <RotateCcw size={14} strokeWidth={1.8} aria-hidden />Play again
+    </button>
+  );
+}
+
 export function OneDials({ bar }: { bar: Bar }) {
   const panels = usePanels();
   return (
